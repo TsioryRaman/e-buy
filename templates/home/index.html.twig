@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Acceuil|e-buy
+{% endblock %}
+
+{% block body %}
+	{% include("component/header.html.twig") %}
+	<div class="container">
+		<h2 class="text-2xl my-8 font-bold">Liste de nos articles:
+		</h2>
+		<div class="md:grid-cols-4 sm:grid-cols-2 grid-cols-1 grid gap-2">
+			{% for article in articles %}
+				<a
+					href="{{ path('article.show', {id:article.id}) }}" class="flex flex-col bg-green-50 hover:bg-green-100 duration-100 text-gray-700 py-4 px-4 rounded-sm shadow-sm my-2">
+					{# <h2 class="text-2xl font-medium">{{article.name}}</h2> #}
+					<p>{{article.description}}</p>
+					<h3 class="mt-8 flex justify-between">
+						<span>Prices:</span>
+						<strong class="ml-100">{{article.price}}
+							$</strong>
+					</h3>
+					<p class="text-xs text-right mt-4 text-gray-400">{{article.updatedAt|date("m/d/y")}}</p>
+				</a>
+			{% endfor %}
+		</div>
+		<div class="flex mt-8">
+			{{ knp_pagination_render(articles) }}
+		</div>
+	</div>
+{% endblock %}

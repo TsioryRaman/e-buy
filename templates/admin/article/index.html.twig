@@ -1,0 +1,23 @@
+{% extends "base.html.twig" %}
+
+{% block title 'Gestion des articles' %}
+
+{% block body %}
+    <div class="container">
+    <div class="grid md:grid-cols-3 sm:grid-cols-2 sm:gap-1">
+    
+    {% for article in articles %}
+    <div class="bg-gray-100 rounded-sm shadow-sm py-4 px-8">
+        <div  class="flex flex-col  py-4   my-2">
+        <h2 class="text-2xl font-medium">{{article.name}}</h2>
+        <p class="mb-2">{{article.description}}</p>
+        </div>
+        <a href="{{ path('admin.article.edit', {id:article.id}) }}" class="text-gray-600 w-auto mt-auto inline-block px-4 py-2 bg-yellow-300 rounded border border-yellow-200 shadow hover:bg-yellow-400 duration-100 hover:text-white">Editer</a>
+        <a href="{{ path('admin.article.edit', {id:article.id}) }}" class="text-gray-50 w-auto mt-auto inline-block px-4 py-2 bg-red-500 rounded border border-red-200 shadow hover:bg-red-600 duration-100">Supprimer</a>
+
+        </div>
+    {% endfor %}
+    </div>
+    </div>
+
+{% endblock %}
