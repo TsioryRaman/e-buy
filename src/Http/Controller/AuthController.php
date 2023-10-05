@@ -14,21 +14,11 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class UserController extends AbstractController
+class AuthController extends AbstractController
 {
 
     public function __construct(private EntityManagerInterface $manager)
     {
-    }
-
-    /**
-     * @Route("user", name="user.index")
-     */
-    public function index(): Response
-    {
-        return $this->render('user/index.html.twig', [
-            'controller_name' => 'UserController',
-        ]);
     }
 
     /**
@@ -40,13 +30,17 @@ class UserController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
         $error = $authenticationUtils->getLastAuthenticationError();
-
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        return $this->render('user/login.html.twig', [
+        if($this->getUser())
+        {
+            return $this->redirectToRoute('home.index');
+        }
+
+        return $this->render('auth/login.html.twig', [
             'controller_name' => 'UserController',
             'error' => $error,
-            'lastUsername' => $lastUsername
+            'last_username' => $lastUsername
         ]);
     }
 
@@ -99,7 +93,7 @@ class UserController extends AbstractController
         }
 
         // dd($form->getErrors());
-        return $this->render('user/register.html.twig', [
+        return $this->render('auth/register.html.twig', [
             "form" => $form->createView(),
             "error" => $messageError
         ]);

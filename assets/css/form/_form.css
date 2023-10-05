@@ -3,6 +3,7 @@ label {
   font-weight: 300;
   font-size: 0.85em;
   margin-bottom: 0.5rem;
+  font-weight: 500;
 }
 
 input:disabled {
@@ -16,9 +17,10 @@ input:disabled {
 .form-group {
     width: inherit;
     position: relative;
-    padding-bottom: 2rem;
+    padding-bottom: 1rem;
     margin-bottom: 1rem;
 }
+
 
 .form-group input,
 .form-group textarea,
@@ -58,7 +60,13 @@ input[type=checkbox]{
 .form-error {
   color: rgba(255, 0, 0, 0.712);
   text-shadow: 1px 0px 5px rgba(255, 0, 0, 0.445);
+  font-size: 0.75em;
   position: absolute;
   bottom: -rem;
   left:0;
+}
+
+input.is-invalid {
+  color: rgba(255, 0, 0, 0.712);
+  border: 1px solid var(--red);
 }

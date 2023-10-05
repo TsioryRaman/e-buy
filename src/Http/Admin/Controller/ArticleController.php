@@ -4,10 +4,13 @@ namespace App\Http\Admin\Controller;
 
 use App\Domain\Article\Article;
 use App\Domain\Article\ArticleRepository;
+use App\Domain\Article\Event\ArticleUpdateEvent;
 use App\Domain\CategoryRepository;
 use App\Form\ArticleType;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,18 +25,24 @@ class ArticleController extends AbstractController
      * @param EntityManagerInterface $manager
      */
     public function __construct(
-        private ArticleRepository $articeRepository,
+        private ArticleRepository $articleRepository,
         private CategoryRepository $categoryRepository,
-        private EntityManagerInterface $manager
+        private EntityManagerInterface $manager,
+        private PaginatorInterface $paginator,
+        private EventDispatcherInterface $dispatcher
     ) {
     }
 
     /**
      * @Route(path="admin", name="admin.article", methods="GET")
      */
-    public function index()
+    public function show(Request $request)
     {
-        $articles = $this->articeRepository->findAll();
+        $articles = $this->paginator
+                        ->paginate(
+                            $this->articleRepository->findLatest(),
+                            $request->query->getInt('page',1),
+                        12);
         return $this->render('admin/article/index.html.twig', ["articles" => $articles]);
     }
 
@@ -44,7 +53,6 @@ class ArticleController extends AbstractController
         Article $article,
         Request $request
     ) {
-        
         /**
          * Creation des formulaires
          * @var $form FormInterface
@@ -55,11 +63,26 @@ class ArticleController extends AbstractController
         // Soumission des formulaires et validation
         if ($form->isSubmitted() && $form->isValid()) {
             $this->manager->flush();
+            $this->dispatcher->dispatch(new ArticleUpdateEvent($article),ArticleUpdateEvent::class);
             return $this->redirectToRoute('admin.article');
         }
 
         return $this->renderForm('admin/article/edit.html.twig', [
             'form' => $form
         ]);
+    }
+
+    /**
+     * @Route("admin/article/delete/{id}", "admin.article.delete", methods={"DELETE"})
+     */
+    public function delete(
+        Article $article
+    ) {
+        /**
+         * Creation des formulaires
+         * @var $form FormInterface
+         */
+        dd("Suppresion");
+        return $this->redirectToRoute('admin.article');
     }
 }

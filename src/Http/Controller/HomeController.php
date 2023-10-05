@@ -24,7 +24,7 @@ class HomeController extends AbstractController
                         ->paginate(
                             $articleRepository->findLatest(),
                             $request->query->getInt('page',1),
-                            16);
+                            10);
 
         return $this->render('home/index.html.twig', [
             'controller_name' => 'HomeController',

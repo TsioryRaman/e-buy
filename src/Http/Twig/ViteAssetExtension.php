@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Twig;
+namespace App\Http\Twig;
 
+use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -10,7 +11,8 @@ class ViteAssetExtension extends AbstractExtension
 
     public function __construct(
         private bool $isDev,
-        private string $manifest
+        private string $manifest,
+        private readonly RequestStack $requestStack
     )
     {
     }
@@ -48,12 +50,14 @@ class ViteAssetExtension extends AbstractExtension
 
     public function assetDev(string $entry,?array $deps): string
     {
+        $request = $this->requestStack->getCurrentRequest();
+        $uri = "http://{$request->getHost()}:3000";
         $html =  <<<HTML
-<script type="module" src="http://localhost:3001/assets/@vite/client"></script>
+<script type="module" src="${uri}/assets/@vite/client"></script>
 HTML;
         if(in_array('react',$deps)){
             $html .= '<script type="module">
-            import RefreshRuntime from "http://localhost:3001/assets/@react-refresh"
+            import RefreshRuntime from '. $uri .'/assets/@react-refresh"
             RefreshRuntime.injectIntoGlobalHook(window)
             window.$RefreshReg$ = () => {}
             window.$RefreshSig$ = () => (type) => type
@@ -61,7 +65,7 @@ HTML;
             </script>';
         }
         $html .= <<<HTML
-        <script type="module" src="http://localhost:3001/assets/{$entry}" defer></script>
+        <script type="module" src="${uri}/assets/{$entry}" defer></script>
 HTML;
         return $html;
     }

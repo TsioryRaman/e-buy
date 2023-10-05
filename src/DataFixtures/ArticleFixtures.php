@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Domain\Article\Article;
 use App\Domain\Fournisseur\Entity\Fournisseur;
+use DateTime;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -21,14 +22,15 @@ class ArticleFixtures extends Fixture implements DependentFixtureInterface
         for ($i = 0; $i < 100; $i++) 
         {
             $article = new Article();
-            $article->setTitle($faker->name);
-            $article->setDescription($faker->words(10, true));
+            $article->setName($faker->name);
+            $article->setDescription($faker->words(200, true));
             $article->setPrice(random_int(100,10000));
             $article->setQuantity(random_int(1,15));
             $article->setPostalCode($faker->postcode);
             $article->setAddress($faker->address);
             $article->setCategory($this->getReference(CategoryFixtures::class . random_int(0,4)));
             $article->setFournisseur($this->getReference(Fournisseur::class . random_int(0,9)));
+            $article->setUpdatedAt(new DateTime('now'));
 
             $this->addReference(Article::class . $i,$article);
             $manager->persist($article);

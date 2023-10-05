@@ -8,6 +8,8 @@
 /node_modules/
 /var/
 /vendor/
+/assets/icons/feather/
+/public/assets/
 ###< symfony/framework-bundle ###
 
 ###> phpunit/phpunit ###
@@ -19,3 +21,7 @@
 .phpunit.result.cache
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
+
+###> liip/imagine-bundle ###
+/public/media/cache/
+###< liip/imagine-bundle ###

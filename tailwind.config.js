@@ -8,9 +8,17 @@ export default {
     extend: {
       container: {
         center: true
-      }
+      },
+      transitionProperty: {
+        'width': 'width'
+    },
+    letterSpacing:{
+      'tightest': '-1rem'
+    }
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/line-clamp'),
+  ],
 }
 

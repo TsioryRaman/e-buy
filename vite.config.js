@@ -19,6 +19,7 @@ const twigRefreshPlugin = {
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(),twigRefreshPlugin],
+  cors: true,
   // Specifie le dossier racine
   root:'./assets',
   // Pour specifier la base de l'url

@@ -1,23 +1,46 @@
-<div class="py-4 text-gray-50 bg-green-500">
+<div class="py-4 text-gray-600 border border-b-green-50">
 	<div class="container">
 		<div class="flex justify-between">
-			<a href="#" class=" text-3xl text-center flex justify-center items-center gap-6">
-				<icon-feather name="shopping-cart"></icon-feather>
-				<p class="font__luckiest">E-buy</p>
+			<a href="{{path("home.index")}}" class="text-center text-green-300 hover:text-green-400 duration-300 flex justify-center items-center gap-4">
+				<icon-feather name="ebuy2" size="24"></icon-feather>
+				<p class="font__luckiest  text-3xl max-h-6">E-buy</p>
 			</a>
-			<div class="flex">
-				<ul class="flex justify-center items-center md:gap-4">
-					<a class="hover:text-white  border-l pl-2" href="">
-						<li class="flex items-center justify-center gap-1">
-							<icon-feather name="user" size="16"></icon-feather>Connexion</li>
-					</a>
-					<a href="">
-						<li class="flex items-center justify-center gap-1">
-							<icon-feather name="edit" size="16"></icon-feather>
-						</li>
-					</a>
-				</ul>
+			<form class="flex flex-row items-center justify-center md:visible cursor-pointer  duration-300 md:bg-gray-100 rounded-full overflow-hidden md:hover:text-white md:hover:bg-gray-200" action="">
+				<label class=" h-full bottom-0 md:flex items-center pl-4 hidden my-0 mx-0 pr-4" for="search">
+					<icon-feather name="search" size="24"></label>
+					<input type="text" placeholder="Rechercher un article..." class="text-sm hidden md:flex focus:w-96 duration:300 bg-inherit w-auto px-8 py-0 mx-0 shadow-none border-none hover:placeholder-gray-400 focus:placeholder-transparent placeholder-gray-700 text-gray-700" name="search" id="search"/>
+
+				</form>
+				<div class="md:flex hidden">
+					<ul class="justify-center items-center font-medium md:flex md:gap-4">
+						{% if not app.user %}
+							<a class="hover:text-green-400 duration-300 pl-2 {{menu_active("/login")}}" href="{{path('app_login')}}">
+								<li class="flex items-center justify-center gap-1">
+									<icon-feather name="user" size="16"></icon-feather>Se connecter</li>
+							</a>
+							<a class="hover:text-green-400 duration-300 pl-2" href="{{path('user.register')}}">
+								<li class="flex items-center justify-center gap-1">S'inscrire</li>
+							</a>
+						{% else %}
+							<a class="hover:text-slate-900  pl-2" href="{{path('app_login')}}">
+								<li class="flex items-center justify-center gap-1">
+									<icon-feather name="user" size="15"></icon-feather>
+									{{app.user.email}}</li>
+							</a>
+							<a class="hover:text-slate-900 hover:font-bold duration-100 pl-2" href="{{path('app_logout')}}">
+								<icon-feather name="logout" size="15"/>
+							</a>
+						{% endif %}
+					</ul>
+				</div>
+				<div class="max-md:flex flex-row items-center  gap-2 hidden">
+					<button class="duration-100 hover:text-green-500">
+						<icon-feather name="search" size="18"></label>
+					</button>
+					<button class="duration-100 hover:text-green-500">
+						<icon-feather name="menu" size="18"></label>
+					</button>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>

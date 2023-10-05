@@ -28,7 +28,11 @@ services:
         resource: '../src/Http/Admin/Controller'
         tags: ['controller.service_arguments']
     
-    App\Twig\ViteAssetExtension:
+    App\Domain\Auth\:
+        resource: '../src/Domain/Auth'
+        tags: ['doctrine.repository_service']
+
+    App\Http\Twig\ViteAssetExtension:
         arguments:
             $isDev: '%env(VITE_DEV)%'
             $manifest: '%kernel.project_dir%/public/assets/manifest.json'

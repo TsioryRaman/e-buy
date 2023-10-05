@@ -3,21 +3,54 @@
 {% block title 'Gestion des articles' %}
 
 {% block body %}
-    <div class="container">
-    <div class="grid md:grid-cols-3 sm:grid-cols-2 sm:gap-1">
-    
-    {% for article in articles %}
-    <div class="bg-gray-100 rounded-sm shadow-sm py-4 px-8">
-        <div  class="flex flex-col  py-4   my-2">
-        <h2 class="text-2xl font-medium">{{article.name}}</h2>
-        <p class="mb-2">{{article.description}}</p>
-        </div>
-        <a href="{{ path('admin.article.edit', {id:article.id}) }}" class="text-gray-600 w-auto mt-auto inline-block px-4 py-2 bg-yellow-300 rounded border border-yellow-200 shadow hover:bg-yellow-400 duration-100 hover:text-white">Editer</a>
-        <a href="{{ path('admin.article.edit', {id:article.id}) }}" class="text-gray-50 w-auto mt-auto inline-block px-4 py-2 bg-red-500 rounded border border-red-200 shadow hover:bg-red-600 duration-100">Supprimer</a>
-
-        </div>
-    {% endfor %}
-    </div>
-    </div>
-
+	<div class="container">
+		<div class="grid lg:grid-cols-[20%_80%] py-4">
+			<div>
+				e-buy
+			</div>
+			<div>
+				<!-- TABLE -->
+				<div class=" px-0 lg:px-12 md:py-8">
+					<table class="table-auto">
+						<div class="">
+							<thead class="rounded-t-xl text-white">
+								<tr class="bg-green-400">
+									<th class="w-2/6 py-6">Nom</th>
+									<th class="w-3/6 py-6">Description</th>
+									<th class="w-1/6 py-6">Action</th>
+								</tr>
+							</thead>
+						</div>
+						<tbody>
+							{% for article in articles %}
+								<tr class="text-left py-8 px-2 text-gray-700 hover:bg-green-300 cursor-pointer hover:text-white duration-150 border-b-green-50 border-b">
+									<td class="py-6 w-2/6">
+										<h2 class="text-md font-medium ml-4">{{article.name}}</h2>
+									</td>
+									<td class="w-3/6">
+										<p class="mb-2 text-sm truncate">{{article.description}}</p>
+									</td>
+									<td class="w-1/6">
+										<div class="flex w-full items-center justify-center flex-row gap-1">
+											<a href="{{ path('admin.article.edit', {id:article.id}) }}" class="text-gray-100 w-auto mt-auto inline-block px-4 py-2 bg-yellow-400 rounded-sm border border-yellow-200 shadow-sm hover:bg-yellow-400 duration-100 hover:text-white"><Icon-feather size="16" name="edit"/></a>
+											<form method="POST" action={{path("admin.article.delete",{id:article.id} )}} onsubmit="return confirm('Voulez-vous vraiment supprimer ce contenu')">
+												<input type="hidden" name="_method" value="DELETE"/>
+												<input type="hidden" name="_csrf_token" value="{{csrf_token('delete' ~ article.id	)}}"/>
+												<button type="submit" class="text-gray-50 w-auto mt-auto inline-block px-4 py-2 bg-red-500 rounded-sm border border-red-200 shadow-sm hover:bg-red-600 duration-100">
+													<Icon-feather size="16" name="trash"/>
+												</button>
+											</form>
+										</div>
+									</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+					<div class="flex mt-8">
+						{{ knp_pagination_render(articles) }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}

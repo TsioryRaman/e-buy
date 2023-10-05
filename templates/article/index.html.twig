@@ -7,18 +7,35 @@
 {% block body %}
 
 	{% include("component/header.html.twig") %}
-	<div class="container mt-4 text-gray-700">
+	<div class="container mt-4 flex flex-row text-gray-700 px-4 py-4 border shadow gap-4">
+		<div class="w-2/4">
+			{% if article.filename %}
+				<img src="{{vich_uploader_asset(article,'imageFile')}}" width="100%" height="auto" alt="">
+			{% else %}
+				<img src="/images/articles/default.jpg" width="100%" height="auto" alt="">
+			{% endif %}
+		</div>
+		<div class="flex w-2/4 flex-col justify-between">
+				<h1 class="text-xl flex flex-row">
+					Nom de l'article:
+					<strong>{{article.name}}</strong>
+				</h1>
+				<div class="text-md">
+					<strong>Description:</strong> 
+					<span class="line-clamp-6 cursor-pointer">
+					{{article.description}}
 
-		<h1 class="text-2xl ">
-			Nom de l'article:
-			<strong>{{article.name}}</strong>
-		</h1>
-        <div class="text-lg">
-            {{article.description}}
-        </div>
-        <div>
-            Price : <strong>{{article.price}}</strong> $
-        </div>
+					</span>
+				</div>
+				<div><strong>Categorie:</strong>  {{article.category.name}}</div>
+				<div><strong>Fornisseur:</strong> {{article.fournisseur.name}}</div>
+				<div><strong>Quantite restant:</strong> {{article.quantity}}</div>
+				<div class="self-end mt-auto">
+					Price :
+					<strong> {{article.price}}</strong>
+					$
+				</div>
+		</div>
 
 	</div>
 {% endblock %}

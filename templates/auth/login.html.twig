@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+{% block title "Se connecter" %}
+
+{% block body %}
+		<h1 class="text-3xl font-medium mb-12 mt-12 text-center">Se connecter</h1>
+
+	<div class="border md:px-6 md:max-w-sm px-4 pb-12 pt-6 mt-12 max-w-md mx-auto relative border-gray-100 text-gray-600 rounded">
+
+		<form action="{{ path('app_login') }}" class="flex flex-col gap-8" method="POST">
+			<div class="gap-2 flex-col flex">
+				<label for="username">Email:</label>
+				<input type="email" class="px-2 {%if error%}is-invalid{%endif%}" id="username" name="_username" value="{{ last_username }}" required placeholder="Email"/>
+                {%if error %}
+                    <span class="text-red-500">{{ error.messageKey|trans(error.messageData, 'security') }}</span>
+                {% endif %}
+			</div>
+
+			<div class="gap-2 flex-col flex">
+				<label for="password">Mot de passe</label>
+				<input type="password" class="px-2 {%if error%}is-invalid{%endif%}" id="_password" name="_password" required placeholder="Mot de passe"/>
+			</div>
+			<div class="gap-2 flex-row items-center flex">
+				<input type="checkbox" id="remember_me" name="_remember_me">
+				<label class=" cursor-pointer mb-0" for="remember_me">Se souvenir de moi</label>
+			</div>
+			<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+			<button type="submit" class="px-4 py-2 rounded-sm shadow self-start bg-green-500 text-white hover:bg-green-400 duration-300">Se connecter</button>
+		</form>
+
+			<a href="{{path('user.register')}}" class="text-gray-800 mt-4 inline-block">S'inscrire</a>
+	</div>
+{% endblock %}

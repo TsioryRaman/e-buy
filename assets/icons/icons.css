@@ -1,0 +1,9 @@
+svg.heart__icon:hover{
+    fill: red;
+    stroke: red !important;
+    transition-duration: 300ms;
+}
+.heart__icon {
+    fill: transparent;
+    stroke: white;
+}

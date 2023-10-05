@@ -3,7 +3,7 @@
 namespace App\Domain\Auth;
 
 use App\Domain\Commande\Entity\Commande;
-use App\Repository\Domain\Auth\UserRepository;
+use App\Domain\Auth\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -90,19 +90,17 @@ class User implements UserInterface,PasswordAuthenticatedUserInterface
     {
         return null;
     }
+    
     public function getRoles(): array
     {
         $role = "ROLE_USER";
 
         return [$role];
     }
+
     public function eraseCredentials()
     {
         
-    }
-    public function getUsername()
-    {
-        return $this->getEmail();
     }
 
     public function getUserIdentifier(): string
