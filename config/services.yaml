@@ -4,6 +4,8 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    typesense_key: "%env(TYPESENSE_KEY)%"
+    typesense_host: "%env(TYPESENSE_HOST)%"
 
 services:
     # default configuration for services in *this* file
@@ -37,5 +39,15 @@ services:
             $isDev: '%env(VITE_DEV)%'
             $manifest: '%kernel.project_dir%/public/assets/manifest.json'
 
+    App\Infrastructure\Search\IndexerInterface:
+        class: App\Infrastructure\Search\Typesense\TypesenseIndexer
+
+    App\Infrastructure\Search\Typesense\TypesenseClient:
+        arguments: 
+            $host: '%typesense_host%'
+            $apiKey: '%typesense_key%'
+
+    App\Infrastructure\Search\SearchInterface:
+        class: App\Infrastructure\Search\Typesense\TypesenseSearch
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

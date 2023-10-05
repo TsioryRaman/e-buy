@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Infrastructure\Search\EventSubscriber;
+namespace App\Infrastructure\Search\Subscriber;
 
 use App\Domain\Article\Event\ArticleUpdateEvent;
 use App\Infrastructure\Search\IndexerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class IndexerSubscriber implements EventSubscriberInterface{
 
 
-    public function __construct(private IndexerInterface $indexer)
+    public function __construct(private IndexerInterface $indexer,private NormalizerInterface $normalizer)
     {
     }
 
@@ -22,7 +23,8 @@ class IndexerSubscriber implements EventSubscriberInterface{
 
     public function indexContent(ArticleUpdateEvent $event)
     {
-        dd($event);
+        $data = $this->normalizer->normalize($event->getArticle(), 'search');
+        $this->indexer->index($data);
     }
 
 }

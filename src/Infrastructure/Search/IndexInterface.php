@@ -4,6 +4,6 @@ namespace App\Infrastructure\Search;
 
 interface IndexerInterface {
 
-    public function index(object $entity): bool;
+    public function index(array $data);
 
 }

@@ -1,5 +1,25 @@
 {% extends 'base.html.twig' %}
-
+{% block title %}
+Recherche | ebuy - {{ q }}
+{% endblock %}
 {% block body %}
-<h1>Resultat pour votre recherche {{ q }}</h1>
-{% endblock %} 
+	<div class="container mt-8">
+		<h1>Resultat pour votre recherche "<em class="font-bold">{{ q }}</em>"
+		</h1>
+        {% if not results|length > 0 %}
+            <h1>Aucun resultat trouve pour le moment!</h1>
+        {% endif %}
+		<ul>
+			{% for result in results %}
+				<li class="mb-4">
+					<strong>{{ result.document.name }}</strong>
+					{% for h in result.highlights %}
+						<p>
+							{{h.snippet | raw}}
+						</p>
+					{% endfor %}
+				</li>
+			{% endfor %}
+		</ul>
+	</div>
+{% endblock %}

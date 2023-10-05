@@ -35,6 +35,12 @@ composer@remove:
 
 
 #################
+#   TYPESENSE  	#
+#################
+typesense@index:
+	$(EXEC_AS_WEB) bin/console app:index
+
+#################
 #   YARN    	#
 #################
 yarn@node_modules: package.json
@@ -88,7 +94,7 @@ symfony@migrate:
 #################
 ebuy@run: symfony@db 
 
-ebuy@start: docker@up ebuy@run
+ebuy@start: docker@up ebuy@run typesense@index
 
 ebuy@stop:
 	docker compose down
