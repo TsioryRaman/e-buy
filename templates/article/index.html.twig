@@ -6,35 +6,53 @@
 
 {% block body %}
 
-	{% include("component/header.html.twig") %}
-	<div class="container mt-4 flex flex-row text-gray-700 px-4 py-4 border shadow gap-4">
-		<div class="w-2/4">
-			{% if article.filename %}
-				<img src="{{vich_uploader_asset(article,'imageFile')}}" width="100%" height="auto" alt="">
-			{% else %}
-				<img src="/images/articles/default.jpg" width="100%" height="auto" alt="">
-			{% endif %}
-		</div>
-		<div class="flex w-2/4 flex-col justify-between">
-				<h1 class="text-xl flex flex-row">
-					Nom de l'article:
-					<strong>{{article.name}}</strong>
+	<div class="container mt-4 flex flex-col text-gray-700 px-4 py-4">
+		<div class="grid grid-cols-[50%_50%] gap-8">
+			<div class="mt-12 flex flex-col gap-4">
+				<h1 class="text-4xl flex text-gray-300 flex-col">
+				Nom du produit:<br/>
+				<strong class="text-gray-600 mt-4 cursor-pointer text-8xl">{{article.name}}</strong>
 				</h1>
 				<div class="text-md">
-					<strong>Description:</strong> 
-					<span class="line-clamp-6 cursor-pointer">
+					<strong class="text-2xl mb-12">Description:</strong>
+					<span class="line-clamp-6 text-xl cursor-pointer">
 					{{article.description}}
 
 					</span>
 				</div>
+			</div>
+			<div class="col-start-2 flex flex-col  ">
+				<div class="shadow overflow-hidden h-84">
+
+					{% if article.attachment|default(null) %}
+						<img class="hover:scale-125 duration-300 rounded bg-center bg-no-repeat bg-contain" src="{{vich_uploader_asset(article.attachment[0],'imageFile') | imagine_filter('preview')}} " alt="">
+					{% else %}
+						<img src="{{ "/images/articles/default.jpg" | imagine_filter('preview') }}" width="100%" height="auto" alt="">
+					{% endif %}
+
+				</div>
+				<div class="flex justify-between items-center  mt-12 flex-row">
+
+					<div class="self-end text-4xl">
+						Price :
+						<strong class="text-6xl"> {{article.price}}</strong>
+						$
+					</div>
+					<form action="">
+						<button class="flex hover:bg-green-500 duration-100 flex gap-2 flex-row px-4 py-2 bg-green-400 rounded shadow text-white flex-row">
+							Ajouter<Icon-feather name="cart"></Icon-feather>
+						</button>
+					</form>
+				</div>
+			</div>
+
+		</div>
+		<div class="flex w-2/4 flex-col justify-between">
+
 				<div><strong>Categorie:</strong>  {{article.category.name}}</div>
 				<div><strong>Fornisseur:</strong> {{article.fournisseur.name}}</div>
 				<div><strong>Quantite restant:</strong> {{article.quantity}}</div>
-				<div class="self-end mt-auto">
-					Price :
-					<strong> {{article.price}}</strong>
-					$
-				</div>
+
 		</div>
 
 	</div>

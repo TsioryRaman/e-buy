@@ -7,7 +7,7 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class ArticleUpdatedEvent extends Event{
 
-    public function __construct(private readonly Article $article)
+    public function __construct(private readonly Article $article,private readonly Article $old)
     {
     }
 
@@ -19,6 +19,11 @@ class ArticleUpdatedEvent extends Event{
     public function getArticle(): Article
     {
         return $this->article;
+    }
+
+    public function getOldArticle(): Article
+    {
+        return $this->old;
     }
 
 }

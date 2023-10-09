@@ -3,22 +3,22 @@
 namespace App\Http\Admin\Data;
 
 use App\Domain\Article\Article;
+use App\Domain\Attachement\Attachment;
 use App\Domain\Category;
 use App\Domain\Commande\Entity\Commande;
 use App\Domain\Fournisseur\Entity\Fournisseur;
 use App\Form\ArticleType;
 use Doctrine\DBAL\Types\Types;
-use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class ArticleCrudData implements CrudDataInterface
 {
     public ?string $description;
 
-    public ?\DateTimeImmutable $createdAt = null;
+    public ?\DateTimeImmutable $created_at = null;
 
-    public ?\DateTimeImmutable $updatedAt = null;
+    public ?\DateTimeImmutable $updated_at = null;
 
     #[Assert\NotNull]
     public Category $category;
@@ -27,16 +27,20 @@ class ArticleCrudData implements CrudDataInterface
     #[Assert\NotNull]
     public int $price;
 
+    #[Assert\NotNull]
     public string $address;
 
     public bool $sold = false;
-
+    #[Assert\NotNull]
     public string $postalCode;
 
     public ?Commande $commande;
 
     public $stores;
 
+    #[Assert\NotNull]
+    #[Assert\NotBlank]
+    #[Assert\Type(type: Types::INTEGER)]
     public int $quantity = 0;
 
     public Fournisseur $fournisseur;
@@ -44,16 +48,12 @@ class ArticleCrudData implements CrudDataInterface
     #[Assert\NotBlank]
     public string $name;
 
-    #[Assert\File()]
-    public ?UploadedFile $imageFile = null;
-
-    public ?string $filename = '';
-
     #[Assert\NotNull]
     public ?string $brand = null;
 
-    public Article $entity;
+    public ?Collection $attachment = null;
 
+    public Article $entity;
 
     public static function makeFromPost(Article $article): self {
 
@@ -66,12 +66,11 @@ class ArticleCrudData implements CrudDataInterface
         $data->fournisseur = $article->getFournisseur();
         $data->description = $article->getDescription();
         $data->postalCode = $article->getPostalCode();
-        $data->updatedAt = $article->getUpdatedAt();
-        $data->createdAt = $article->getCreatedAt();
+        $data->updated_at = $article->getUpdatedAt();
+        $data->created_at = $article->getCreatedAt();
         $data->quantity = $article->getQuantity();
         $data->category = $article->getCategory();
-        $data->imageFile = $article->getImageFile();
-        $data->filename = $article->getFilename();
+        $data->attachment = $article->getAttachment();
 
         return $data;
 
@@ -79,8 +78,8 @@ class ArticleCrudData implements CrudDataInterface
 
     public function hydrate():void
     {
+        /** @var Attachment $a */
         $this->entity
-            ->setImageFile($this->imageFile)
             ->setName($this->name)
             ->setBrand($this->brand)
             ->setAddress($this->address)
@@ -92,6 +91,12 @@ class ArticleCrudData implements CrudDataInterface
             ->setQuantity($this->quantity)
             ->setCategory($this->category)
             ->setUpdatedAt(new \DateTimeImmutable());
+
+        foreach ($this->attachment as $a){
+            $a->setArticle($this->entity);
+        }
+
+
 
 
     }

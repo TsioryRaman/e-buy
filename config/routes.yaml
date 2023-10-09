@@ -1,3 +1,6 @@
+# app/config/route/liip_imagine.yml
+_liip_imagine:
+    resource: "@LiipImagineBundle/Resources/config/routing.yaml"
 # config/routes.yaml
 app_logout:
     path: /logout
@@ -6,4 +9,3 @@ app_logout:
 controllers:
     resource: ../src/Http/
     type: attribute
-# app/config/route/liip_imagine.yml

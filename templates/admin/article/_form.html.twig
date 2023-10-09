@@ -1,0 +1,24 @@
+<ul class="files"
+    data-index="{{ form.attachment|length > 0 ? form.attachment|last.vars.name + 1 : 0 }}"
+    data-prototype="{{ form_widget(form.attachment.vars.prototype)|e('html_attr') }}"
+></ul>
+<div class="bg-gray-50 flex flex-col mx-64 items-center gap-4 py-8">
+    <label class="h-44 w-64  text-gray-600 flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-gray-300 duration-200 hover:gap-6 hover:duration-500 shadow rounded-sm" for="file__input">
+        <Icon-feather name="upload" size="64"></Icon-feather>
+        Uploader des images
+    </label>
+    <div class="flex flex-row">
+
+        {% for a in form.attachment %}
+            {% if  a.vars.data.filename|default(null) %}
+                <img src="{{ vich_uploader_asset(a.vars.data,'imageFile') }}" class="rounded shadow" height="200px" width="200px" alt="">
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+<input type="file" id="file__input" accept=".jpg,.jpeg,.png" multiple class="file-input hidden text-transparent">
+
+
+
+{{ form_widget(form.attachment, { 'attr': {'class': 'hidden'} }) }}

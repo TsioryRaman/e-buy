@@ -107,5 +107,7 @@ ebuy@stop:
 
 dev:
 	docker compose up
+build:
+	docker compose build
 
 ebuy@restart: ebuy@stop ebuy@start

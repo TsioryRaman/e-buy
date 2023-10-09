@@ -2,10 +2,12 @@
 
 namespace App\Domain\Article;
 
+use App\Domain\Attachement\Attachment;
 use App\Domain\Category;
 use App\Domain\Commande\Entity\Commande;
 use App\Domain\Fournisseur\Entity\Fournisseur;
 use App\Domain\Store\Entity\Store;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -26,10 +28,10 @@ class Article
     private ?string $description;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
-    private ?\DateTimeImmutable $createdAt = null;
+    private ?\DateTimeImmutable $created_at = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
-    private \DateTimeImmutable $updatedAt;
+    private \DateTimeImmutable $updated_at;
 
     #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: "articles")]
     #[ORM\JoinColumn(nullable: false)]
@@ -54,7 +56,7 @@ class Article
     private $stores;
 
     #[ORM\Column(type: Types::INTEGER)]
-    private int $quantity = 0;
+    private ?int $quantity = 0;
 
     #[ORM\ManyToOne(targetEntity: Fournisseur::class, inversedBy: "article")]
     private Fournisseur $fournisseur;
@@ -62,18 +64,15 @@ class Article
     #[ORM\Column(type: Types::STRING, length: 255)]
     private string $name;
 
-    #[Vich\UploadableField(mapping: "articles", fileNameProperty: "filename")]
-    private ?File $imageFile = null;
-
-    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
-    private ?string $filename = null;
-
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $brand = null;
 
+    #[ORM\OneToMany(mappedBy: 'article', targetEntity: Attachment::class, cascade: ['persist', 'remove'])]
+    private Collection $attachment;
+
     public function __construct()
     {
-        $this->createdAt = new \DateTimeImmutable();
+        $this->attachment = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -95,24 +94,24 @@ class Article
 
     public function getCreatedAt(): ?\DateTimeImmutable
     {
-        return $this->createdAt;
+        return $this->created_at;
     }
 
-    public function setCreatedAt(?\DateTimeImmutable $createdAt): self
+    public function setCreatedAt(?\DateTimeImmutable $created_at): self
     {
-        $this->createdAt = $createdAt;
+        $this->created_at = $created_at;
 
         return $this;
     }
 
     public function getUpdatedAt(): ?\DateTimeImmutable
     {
-        return $this->updatedAt;
+        return $this->updated_at;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): self
+    public function setUpdatedAt(\DateTimeImmutable $updated_at): self
     {
-        $this->updatedAt = $updatedAt;
+        $this->updated_at = $updated_at;
 
         return $this;
     }
@@ -221,7 +220,7 @@ class Article
         return $this->quantity;
     }
 
-    public function setQuantity(int $quantity): self
+    public function setQuantity(?int $quantity): self
     {
         $this->quantity = $quantity;
 
@@ -238,34 +237,6 @@ class Article
         $this->fournisseur = $fournisseur;
 
         return $this;
-    }
-
-    public function setImageFile(?File $imageFile = null): self
-    {
-        $this->imageFile = $imageFile;
-        if (null !== $imageFile) {
-            // It is required that at least one field changes if you are using doctrine
-            // otherwise the event listeners won't be called and the file is lost
-            $this->updatedAt = new \DateTimeImmutable();
-        }
-
-        return $this;
-    }
-
-    public function getImageFile(): ?File
-    {
-        return $this->imageFile;
-    }
-
-    public function setFilename(?string $filename): self
-    {
-        $this->filename = $filename;
-        return $this;
-    }
-
-    public function getFilename(): ?string
-    {
-        return $this->filename;
     }
 
     public function getName(): ?string
@@ -288,6 +259,36 @@ class Article
     public function setBrand(string $brand): static
     {
         $this->brand = $brand;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Attachment>
+     */
+    public function getAttachment(): Collection
+    {
+        return $this->attachment;
+    }
+
+    public function addAttachment(Attachment $attachment): static
+    {
+        if (!$this->attachment->contains($attachment)) {
+            $this->attachment->add($attachment);
+            $attachment->setArticle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAttachment(Attachment $attachment): static
+    {
+        if ($this->attachment->removeElement($attachment)) {
+            // set the owning side to null (unless already changed)
+            if ($attachment->getArticle() === $this) {
+                $attachment->setArticle(null);
+            }
+        }
 
         return $this;
     }

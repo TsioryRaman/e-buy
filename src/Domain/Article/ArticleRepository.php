@@ -57,7 +57,7 @@ class ArticleRepository extends ServiceEntityRepository
     public function findLatest():QueryBuilder
     {
         return $this->createQueryBuilder('a')
-                    ->orderBy('a.createdAt',"DESC");
+                    ->orderBy('a.created_at',"DESC");
     }
 
     // /**

@@ -12,6 +12,7 @@
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.16",
         "knplabs/knp-paginator-bundle": "^6.2",
+        "liip/imagine-bundle": "^2.12",
         "phpdocumentor/reflection-docblock": "^5.3",
         "phpstan/phpdoc-parser": "^1.24",
         "sensio/framework-extra-bundle": "^6.2",
@@ -43,7 +44,7 @@
         "symfony/yaml": "6.1.*",
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/twig": "^2.12|^3.0",
-        "vich/uploader-bundle": "^2.2"
+        "vich/uploader-bundle": "^2.0.1"
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "*",

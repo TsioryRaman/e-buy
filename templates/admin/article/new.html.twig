@@ -22,7 +22,11 @@
         <div class="flex w-full gap-3 space-between">
             {{ form_row(form.category) }}
             {{ form_row(form.fournisseur) }}
-            {{ form_row(form.imageFile) }}
+            <ul class="files"
+                data-index="{{ form.attachment|length > 0 ? form.attachement|last.vars.name + 1 : 0 }}"
+                data-prototype="{{ form_widget(form.attachment.vars.prototype)|e('html_attr') }}"
+            ></ul>
+            <input type="file" multiple class="file-input">
 
         </div>
         <div class="flex w-full gap-3 space-between">

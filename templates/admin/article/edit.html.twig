@@ -12,15 +12,12 @@
     {{ form_start(form) }}
     <div class="flex gap-12 space-between w-full">
         {{ form_row(form.name) }}
-
         {{ form_row(form.brand) }}
     </div>
 
     <div class="flex w-full gap-6 space-between">
         {{ form_row(form.category) }}
         {{ form_row(form.fournisseur) }}
-        {{ form_row(form.imageFile) }}
-
     </div>
     <div class="flex w-full gap-6 space-between">
         {{ form_row(form.price) }}
@@ -34,10 +31,11 @@
             {{ form_widget(form.sold) }}
         </div>
     </div>
-
     <div class="flex w-full">
         {{ form_row(form.description) }}
     </div>
+    {% include 'admin/article/_form.html.twig' %}
+
     {{ form_rest(form) }}
     <button class="px-4 mt-4 py-2 text-white rounded hover:bg-green-400 shadow-sm duration-300 bg-green-500">
         Enregister
