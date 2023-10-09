@@ -6,111 +6,75 @@ use App\Domain\Category;
 use App\Domain\Commande\Entity\Commande;
 use App\Domain\Fournisseur\Entity\Fournisseur;
 use App\Domain\Store\Entity\Store;
-use App\Domain\Article\ArticleRepository;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use DateTime;
-use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
-/**
- * @Vich\Uploadable
- * @ORM\Entity(repositoryClass=ArticleRepository::class)
- */
+
+#[Vich\Uploadable]
+#[ORM\Entity(repositoryClass: ArticleRepository::class)]
 class Article
 {
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: Types::INTEGER)]
+    private int $id;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $description;
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    private \DateTimeImmutable $updatedAt;
+
+    #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: "articles")]
+    #[ORM\JoinColumn(nullable: false)]
+    private Category $category;
+
+    #[ORM\Column(type: Types::INTEGER)]
+    private int $price;
+
+    #[ORM\Column(type: Types::STRING, length: 255)]
+    private string $address;
+
+    #[ORM\Column(type: Types::BOOLEAN, length: 255)]
+    private bool $sold = false;
+
+    #[ORM\Column(type: Types::STRING, length: 255)]
+    private string $PostalCode;
+
+    #[ORM\ManyToOne(targetEntity: Commande::class, inversedBy: "article")]
+    private ?Commande $commande;
+
+    #[ORM\ManyToMany(targetEntity: Store::class, mappedBy: "article")]
+    private $stores;
+
+    #[ORM\Column(type: Types::INTEGER)]
+    private int $quantity = 0;
+
+    #[ORM\ManyToOne(targetEntity: Fournisseur::class, inversedBy: "article")]
+    private Fournisseur $fournisseur;
+
+    #[ORM\Column(type: Types::STRING, length: 255)]
+    private string $name;
+
+    #[Vich\UploadableField(mapping: "articles", fileNameProperty: "filename")]
+    private ?File $imageFile = null;
+
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
+    private ?string $filename = null;
+
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
+    private ?string $brand = null;
 
     public function __construct()
     {
-        $this->stores = new ArrayCollection();
-        $this->created_at = new DateTime('now');
+        $this->createdAt = new \DateTimeImmutable();
     }
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private int $id;
-
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $description;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $created_at;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $updated_at;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="articles")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $category;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $price;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $address;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $sold = false;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $PostalCode;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Commande::class, inversedBy="article")
-     */
-    private $commande;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=Store::class, mappedBy="article")
-     */
-    private $stores;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $quantity = 0;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Fournisseur::class, inversedBy="article")
-     */
-    private $fournisseur;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $name;
-
-    /**
-     * @Vich\UploadableField(mapping="articles", fileNameProperty="filename")
-     * @var File|null
-     */
-    private $imageFile;
-
-    /**
-     * @ORM\Column(nullable="true",type="string")
-     * @var string|null
-     */
-    private $filename;
 
     public function getId(): ?int
     {
@@ -129,19 +93,26 @@ class Article
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTime
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
-        return $this->created_at;
+        return $this->createdAt;
     }
 
-    public function getUpdatedAt(): ?\DateTime
+    public function setCreatedAt(?\DateTimeImmutable $createdAt): self
     {
-        return $this->updated_at;
+        $this->createdAt = $createdAt;
+
+        return $this;
     }
 
-    public function setUpdatedAt(\DateTime $updated_at): self
+    public function getUpdatedAt(): ?\DateTimeImmutable
     {
-        $this->updated_at = $updated_at;
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeImmutable $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }
@@ -272,11 +243,12 @@ class Article
     public function setImageFile(?File $imageFile = null): self
     {
         $this->imageFile = $imageFile;
-        if ($this->imageFile !== null) {
+        if (null !== $imageFile) {
             // It is required that at least one field changes if you are using doctrine
             // otherwise the event listeners won't be called and the file is lost
-            $this->updated_at = new \DateTime('now');
+            $this->updatedAt = new \DateTimeImmutable();
         }
+
         return $this;
     }
 
@@ -304,6 +276,18 @@ class Article
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getBrand(): ?string
+    {
+        return $this->brand;
+    }
+
+    public function setBrand(string $brand): static
+    {
+        $this->brand = $brand;
 
         return $this;
     }

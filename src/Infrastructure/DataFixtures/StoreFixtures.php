@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DataFixtures;
+namespace App\Infrastructure\DataFixtures;
 
 use App\Domain\Article\Article;
 use App\Domain\Store\Entity\Store;
@@ -20,13 +20,11 @@ class StoreFixtures extends Fixture implements DependentFixtureInterface
 
         $k = 0;
 
-        for($i = 0; $i < 10; $i++)
-        {
-            $store = new Store();
-            $store->setName($faker->company);
-            $store->setAddress($faker->address);
-            for($j = 0; $j<5; $j++)
-            {
+        for ($i = 0; $i < 10; $i++) {
+            $store = (new Store())
+                ->setName($faker->company)
+                ->setAddress($faker->address);
+            for ($j = 0; $j < 5; $j++) {
                 $store->addArticle($this->getReference(Article::class . $k));
                 $k++;
             }

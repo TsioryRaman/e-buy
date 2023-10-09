@@ -15,7 +15,7 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Domain'
                 prefix: 'App\Domain'
                 alias: App
-                type: annotation
+                type: attribute
 
 when@test:
     doctrine:

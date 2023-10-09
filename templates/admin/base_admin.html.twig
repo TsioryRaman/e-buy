@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+    {% block stylesheets %}
+    {% endblock %}
+
+    {% block javascripts %}
+        {{ vite_asset("main.js") }}
+        {{ vite_asset("tailwind.js") }}
+
+    {% endblock %}
+</head>
+<body>
+    <div class="min-h-screen flex flex-col">
+        <div class="grid lg:grid-cols-[20%_80%] grid-cols-[0%_100%]">
+            <div class="md:pb-8 shadow-md overflow-x-hidden relative w-full">
+                <div class="ml-8 w-64 fixed overflow-x-hidden max-h-screen overflow-hidden min-h-screen max-h-screen">
+                    <a href="{{ path('admin.article.index') }}">
+                        <h1 class="text-xl py-8 uppercase font-medium flex flex-row gap-2 text-gray-700 items-center uppercase"><Icon-feather name="home" size="18"></Icon-feather>Dashboard</h1>
+                    </a>
+                    <div class="flex flex-col gap-4">
+                        <div>
+                            <h1 class="text-xl text-gray-400">Produit</h1>
+                            <ul class="flex ml-4 flex-col gap-2 w-full mt-3 text-md cursor-pointer">
+                                <a href="{{ path('admin.article.index') }}" id="link" {{menu_active("admin.article.index")}} {{menu_active("admin.article.new")}} {{menu_active("admin.article.edit")}} class="flex flex-row items-center hover:text-gray-500 duration-100 gap-2">
+                                    <Icon-feather name="article" size="18"></Icon-feather><li class="py-1">Article</li>
+                                </a>
+                                <a href="{{ path('admin.category.index') }}" id="link" {{menu_active("admin.category.index")}} {{menu_active("admin.category.new")}} {{menu_active("admin.category.edit")}} class="flex flex-row items-center hover:text-gray-500 duration-100 gap-2">
+                                    <Icon-feather name="category" size="18"></Icon-feather><li class="py-1">Categorie</li>
+                                </a>
+                                <a href="#" class="flex flex-row items-center hover:text-gray-500 duration-100 gap-2" id="link">
+                                    <Icon-feather name="article" size="18"></Icon-feather><li class="py-1">Option</li>
+                                </a>
+                                <a href="#" id="link" class="flex flex-row items-center hover:text-gray-500 duration-100 gap-2">
+                                    <Icon-feather name="fournisseur" size="18"></Icon-feather><li class="py-1">Fournisseur</li>
+                                </a>
+                            </ul>
+                        </div>
+                        <hr>
+                        <div>
+                            <h1 class="text-xl text-gray-400">Compte</h1>
+                            <ul class="flex ml-4 flex-col gap-2 w-full mt-3 text-md cursor-pointer">
+                                <a href="#" class="flex flex-row items-center hover:text-gray-500 duration-100 gap-2">
+                                    <Icon-feather name="user" size="18"></Icon-feather><li class="py-1">Utilisateur</li>
+                                </a>
+                                <a href="#" class="flex flex-row items-center hover:text-gray-500 duration-100 gap-2">
+                                    <Icon-feather name="cart" size="18"></Icon-feather><li class="py-1">Panier</li>
+                                </a>
+                                </a>
+                            </ul>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="flex flex-col h-full">
+                <header class="w-full py-8 border border-b-gray-100 px-12">
+                    <div class="w-full items-center flex flex-row justify-end gap-4">
+                        <div class="hover:text-gray-200 text-gray-400 duration-200">
+                            <a href="{{ path("app_logout") }}"><Icon-feather name="bell" size="18"></Icon-feather></a>
+                        </div>
+                        <div class="hover:text-gray-200 text-gray-400 duration-200">
+                            <a href="{{ path("app_logout") }}"><Icon-feather name="logout" size="18"></Icon-feather></a>
+                        </div>
+                    </div>
+                </header>
+                <div class="bg-gray-50 self-stretch h-full">
+                    <div class="mx-12  my-6 flex md:col-start-2 flex-col">
+                        {% block header %}
+                            <h1 class="text-2xl py-6 uppercase mt-4 mb-8">E-buy</h1>
+                        {% endblock %}
+                        <div class="bg-white container rounded border shadow py-8 px-6">
+                            {% block body %}
+                            {% endblock %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+

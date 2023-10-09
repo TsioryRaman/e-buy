@@ -1,28 +1,48 @@
-{% extends "base.html.twig" %}
+{% extends "admin/base_admin.html.twig" %}
 
 {% block title 'Modification des article | e-shop' %}
-
+{% block header %}
+    <h1 class="text-2xl py-6 mt-4 mb-8 flex flex-row items-center gap-2 text-gray-400 cursor-default">
+        <Icon-feather class="text-blue-500" name="edit" size="24"></Icon-feather>
+        Editer
+    </h1>
+{% endblock %}
 {% block body %}
 
-	{% include "component/header.html.twig" %}
+    {{ form_start(form) }}
+    <div class="flex gap-12 space-between w-full">
+        {{ form_row(form.name) }}
 
-	<div class="container">
-		<h1 class="text-2xl px-4 py-6 bg-blue-50 mt-4 mb-8">Edition</h1>
-		{{form_start(form)}}
-		<div class="flex w-full">
-			{{form_row(form.name)}}
-		</div>
-		<div class="flex w-full">
-			{{form_row(form.description)}}
-		</div>
+        {{ form_row(form.brand) }}
+    </div>
 
-		<div class="flex w-full">
-			{{form_row(form.imageFile)}}
-		</div>
-		{{form_rest(form)}}
-		<button class="px-4 mt-4 py-2 text-white rounded hover:bg-green-400 shadow-sm duration-300 bg-green-500">Enregister</button>
+    <div class="flex w-full gap-6 space-between">
+        {{ form_row(form.category) }}
+        {{ form_row(form.fournisseur) }}
+        {{ form_row(form.imageFile) }}
 
-		{{form_end(form)}}
-	</div>
+    </div>
+    <div class="flex w-full gap-6 space-between">
+        {{ form_row(form.price) }}
+        {{ form_row(form.address) }}
+        {{ form_row(form.postalCode) }}
+    </div>
+    <div class="grid grid-cols-3 gap-6 items-center space-between">
+        {{ form_row(form.quantity) }}
+        <div class="flex space-between h-full self-stretch flex-col">
+            <label class="mb-4" for="article_sold cursor-pointer">Sold</label>
+            {{ form_widget(form.sold) }}
+        </div>
+    </div>
+
+    <div class="flex w-full">
+        {{ form_row(form.description) }}
+    </div>
+    {{ form_rest(form) }}
+    <button class="px-4 mt-4 py-2 text-white rounded hover:bg-green-400 shadow-sm duration-300 bg-green-500">
+        Enregister
+    </button>
+
+    {{ form_end(form) }}
 
 {% endblock %}

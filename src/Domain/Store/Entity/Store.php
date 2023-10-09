@@ -3,37 +3,32 @@
 namespace App\Domain\Store\Entity;
 
 use App\Domain\Article\Article;
-use App\Repository\Domain\Store\Entity\StoreRepository;
+use App\Repository\Domain\Store\StoreRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=StoreRepository::class)
- */
+
+ #[ORM\Entity(repositoryClass:StoreRepository::class)]
 class Store
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $name;
+     #[ORM\Id]
+     #[ORM\GeneratedValue]
+     #[ORM\Column(type:Types::INTEGER)]
+    private int $id;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Article::class, inversedBy="stores")
-     */
-    private $article;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $address;
+     #[ORM\Column(type:Types::STRING, length:255)]
+    private string $name;
+
+
+     #[ORM\ManyToMany(targetEntity:Article::class, inversedBy:"stores")]
+    private Collection $article;
+
+    #[ORM\Column(type:Types::STRING, length:255)]
+    private string $address;
 
     public function __construct()
     {

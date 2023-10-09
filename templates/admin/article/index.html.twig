@@ -1,56 +1,76 @@
-{% extends "base.html.twig" %}
+{% extends "admin/base_admin.html.twig" %}
 
 {% block title 'Gestion des articles' %}
 
+{% block header %}
+    <h1 class="text-2xl py-6 mt-4 mb-8 flex flex-row items-center gap-2 text-gray-400 cursor-default">
+        <Icon-feather name="list" class="text-blue-500" size="24"></Icon-feather>
+        Liste des articles
+    </h1>
+{% endblock %}
+
 {% block body %}
-	<div class="container">
-		<div class="grid lg:grid-cols-[20%_80%] py-4">
-			<div>
-				e-buy
-			</div>
-			<div>
-				<!-- TABLE -->
-				<div class=" px-0 lg:px-12 md:py-8">
-					<table class="table-auto">
-						<div class="">
-							<thead class="rounded-t-xl text-white">
-								<tr class="bg-green-400">
-									<th class="w-2/6 py-6">Nom</th>
-									<th class="w-3/6 py-6">Description</th>
-									<th class="w-1/6 py-6">Action</th>
-								</tr>
-							</thead>
-						</div>
-						<tbody>
-							{% for article in articles %}
-								<tr class="text-left py-8 px-2 text-gray-700 hover:bg-green-300 cursor-pointer hover:text-white duration-150 border-b-green-50 border-b">
-									<td class="py-6 w-2/6">
-										<h2 class="text-md font-medium ml-4">{{article.name}}</h2>
-									</td>
-									<td class="w-3/6">
-										<p class="mb-2 text-sm truncate">{{article.description}}</p>
-									</td>
-									<td class="w-1/6">
-										<div class="flex w-full items-center justify-center flex-row gap-1">
-											<a href="{{ path('admin.article.edit', {id:article.id}) }}" class="text-gray-100 w-auto mt-auto inline-block px-4 py-2 bg-yellow-400 rounded-sm border border-yellow-200 shadow-sm hover:bg-yellow-400 duration-100 hover:text-white"><Icon-feather size="16" name="edit"/></a>
-											<form method="POST" action={{path("admin.article.delete",{id:article.id} )}} onsubmit="return confirm('Voulez-vous vraiment supprimer ce contenu')">
-												<input type="hidden" name="_method" value="DELETE"/>
-												<input type="hidden" name="_csrf_token" value="{{csrf_token('delete' ~ article.id	)}}"/>
-												<button type="submit" class="text-gray-50 w-auto mt-auto inline-block px-4 py-2 bg-red-500 rounded-sm border border-red-200 shadow-sm hover:bg-red-600 duration-100">
-													<Icon-feather size="16" name="trash"/>
-												</button>
-											</form>
-										</div>
-									</td>
-								</tr>
-							{% endfor %}
-						</tbody>
-					</table>
-					<div class="flex mt-8">
-						{{ knp_pagination_render(articles) }}
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+    <div class="flex flex-row justify-between">
+        <form action="{{ path('admin.article.index') }}" method="GET" class="relative cursor-pointer items-center flex flex-row justify-center ">
+            <input type="text" class="px-8" name="q" value="{% if q|default(null) %}{{ q }}{% endif %}" id="search_article" placeholder="Rechercher">
+            <button type="submit" class="absolute right-4">
+                <label class="text-gray-200 top-50">
+                    <Icon-feather name="search"></Icon-feather>
+                </label>
+            </button>
+        </form>
+        <a href="{{ path("admin.article.new") }}"
+           class="bg-green-400 pl-2 pr-4 py-2 shadow-sm rounded-md inline-block text-white hover:bg-green-500 duration-200 flex flex-row mb-4">
+            <Icon-feather name="plus" size="24"></Icon-feather>
+            Ajouter</a>
+    </div>
+    <div class=" px-0 overflow-x-hidden ">
+        <table class="table-auto  w-full cursor-pointer">
+            <thead class=" text-gray-400 font-normal">
+            <tr class="">
+                <th class="w-1/6 py-6 text-left rounded-tl-lg">id</th>
+                <th class="w-1/6 py-6 text-left">Nom</th>
+                <th class="w-3/6 py-6 text-left">Description</th>
+                <th class="w-1/6 py-6 rounded-tr-lg">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for row in rows %}
+                <tr class="even:bg-white group odd:bg-green-100 text-left py-8 px-2 text-gray-700 hover:bg-green-300 cursor-pointer hover:text-white duration-150 border-b-green-50 border-b">
+                    <td class="py-6 w-1/6">
+                        <h2 class="text-md font-medium ml-4">{{ row.id }}</h2>
+                    </td>
+                    <td class="py-6 w-1/6">
+                        <h2 class="text-md font-medium">{{ row.name }}</h2>
+                    </td>
+                    <td class="w-2/6">
+                        <p class="text-sm truncate max-w-xl min-w-xl">{{ row.description }}</p>
+                    </td>
+                    <td class="w-1/6">
+                        <div class="flex w-full items-center justify-center  flex-row gap-1">
+                            <a href="{{ path('admin.article.edit', {id:row.id}) }}"
+                               class="text-gray-300 hover:text-yellow-200 group-hover:text-white duration-100 w-auto mt-auto inline-block px-4 py-2">
+                                <Icon-feather size="20" name="edit"></Icon-feather>
+                            </a>
+                            <form method="POST" action={{ path("admin.article.delete",{id:row.id} ) }} onsubmit="return
+                                  confirm(
+                            'Voulez-vous vraiment supprimer ce contenu?')">
+                            <input type="hidden" name="_method" value="DELETE"/>
+                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('delete' ~ row.id    ) }}"/>
+                            <button type="submit"
+                                    class="text-gray-300 group-hover:text-white w-auto mt-auto inline-block px-4 py-2 duration-100">
+                                <Icon-feather size="20" name="trash"/>
+                            </button>
+                            </form>
+                        </div>
+                    </td>
+
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="flex mt-8">
+            {{ knp_pagination_render(rows) }}
+        </div>
+    </div>
 {% endblock %}

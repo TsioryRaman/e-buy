@@ -9,45 +9,40 @@ use App\Repository\Domain\Commande\Entity\CommandeRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=CommandeRepository::class)
- */
+ #[ORM\Entity(repositoryClass:CommandeRepository::class)]
+
 class Commande
 {
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="commandes")
-     */
-    private $user;
+     #[ORM\Id]
+     #[ORM\GeneratedValue]
+     #[ORM\Column(type:Types::INTEGER)]
+    private int $id;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Article::class, mappedBy="commande")
-     */
+
+     #[ORM\ManyToOne(targetEntity:User::class, inversedBy:"commandes")]
+    private User $user;
+
+
+    #[ORM\OneToMany(mappedBy: "commande", targetEntity: Article::class)]
     private $article;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $date_commande;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Delivery::class, inversedBy="commande")
-     */
-    private $delivery;
+    #[ORM\Column(type:Types::DATETIME_IMMUTABLE)]
+    private \DateTimeInterface $date_commande;
+
+
+     #[ORM\ManyToOne(targetEntity:Delivery::class, inversedBy:"commande")]
+    private Delivery $delivery;
 
     public function __construct()
     {
         $this->article = new ArrayCollection();
-        $this->date_commande = new \DateTime();
+        $this->date_commande = new \DateTimeImmutable();
     }
 
     public function getId(): ?int

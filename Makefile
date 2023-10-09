@@ -1,6 +1,7 @@
 EXEC_AS_ROOT= docker compose exec php-fpm
 EXEC_AS_WEB= docker compose exec --user=www-data php-fpm
 CONSOLE= $(EXEC_AS_WEB) bin/console
+
 .PHONE: console
 
 console:
@@ -25,7 +26,7 @@ CONSOLE= bin/console
 #   COMPOSER    #
 #################
 composer@vendor: composer.json
-#	$(EXEC_AS_WEB) composer install
+	$(EXEC_AS_WEB) composer install
 
 composer@require:
 	$(EXEC_AS_WEB) composer require $(bundle)
@@ -76,18 +77,23 @@ symfony@db: composer@vendor symfony@wait-for-db
 #################
 #   SYMFONY    	#
 #################
-symfony@migration:
-	$(CONSOLE) make:migration
+migration:
+	$(EXEC_AS_WEB) bin/console make:migration
 
-symfony@fixtures:
-	$(CONSOLE) doctrine:fixtures:load
+fixtures:
+	$(EXEC_AS_WEB) bin/console doctrine:fixtures:load
 
-symfony@dropdata:
-	$(CONSOLE) doctrine:database:drop --force
+dropdata:
+	$(EXEC_AS_WEB) bin/console doctrine:database:drop --force
 
-symfony@migrate:
-	$(CONSOLE) doctrine:migration:migrate
+migrate:
+	$(EXEC_AS_WEB) bin/console doctrine:migration:migrate
 
+#################
+#   MAKE    	#
+#################
+entity:
+	$(EXEC_AS_WEB) bin/console make:entity $(entity)
 
 #################
 #   EBUY    	#
@@ -98,5 +104,8 @@ ebuy@start: docker@up ebuy@run typesense@index
 
 ebuy@stop:
 	docker compose down
+
+dev:
+	docker compose up
 
 ebuy@restart: ebuy@stop ebuy@start

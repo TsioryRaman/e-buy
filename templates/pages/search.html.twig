@@ -4,7 +4,7 @@ Recherche | ebuy - {{ q }}
 {% endblock %}
 {% block body %}
 	<div class="container mt-8">
-		<h1>Resultat pour votre recherche "<em class="font-bold">{{ q }}</em>"
+		<h1 class="text-6xl mb-6 font-medium">Resultat pour votre recherche "<em class="font-bold text-green-400">{{ q }}</em>"
 		</h1>
         {% if not results|length > 0 %}
             <h1>Aucun resultat trouve pour le moment!</h1>

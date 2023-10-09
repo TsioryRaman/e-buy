@@ -7,6 +7,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -51,15 +52,12 @@ class ArticleRepository extends ServiceEntityRepository
     /**
      * Retourne les dernier biens
      *
-     * @return Query
+     * @return QueryBuilder
      */
-    public function findLatest():Query
+    public function findLatest():QueryBuilder
     {
         return $this->createQueryBuilder('a')
-                    ->where('a.sold = :sold')
-                    ->orderBy('a.created_at',"DESC")
-                    ->setParameter('sold',false)
-                    ->getQuery();
+                    ->orderBy('a.createdAt',"DESC");
     }
 
     // /**

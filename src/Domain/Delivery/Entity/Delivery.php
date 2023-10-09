@@ -6,29 +6,26 @@ use App\Domain\Commande\Entity\Commande;
 use App\Repository\Domain\Delivery\Entity\DeliveryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=DeliveryRepository::class)
- */
+
+#[ORM\Entity(repositoryClass:DeliveryRepository::class)]
 class Delivery
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $name;
+     #[ORM\Id]
+     #[ORM\GeneratedValue]
+     #[ORM\Column(type:Types::INTEGER)]
+    private int $id;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Commande::class, mappedBy="delivery")
-     */
-    private $commande;
+
+     #[ORM\Column(type:Types::STRING, length:255)]
+    private string $name;
+
+
+     #[ORM\OneToMany(mappedBy: "delivery", targetEntity: Commande::class)]
+    private Collection $commande;
 
     public function __construct()
     {

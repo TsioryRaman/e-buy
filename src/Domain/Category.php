@@ -2,47 +2,30 @@
 
 namespace App\Domain;
 
-use App\Repository\CategoryRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Domain\CategoryRepository;
 
-/**
- * @ORM\Entity(repositoryClass=CategoryRepository::class)
- */
+#[ORM\Entity(repositoryClass: CategoryRepository::class)]
 class Category
 {
 
-    public function __construct()
-    {
-        $this->created_at = new \DateTime();
-        $this->updated_at = new \DateTime();
-    }
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column()]
+    private int $id;
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    #[ORM\Column(length:255)]
+    private string $name;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $name;
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $description;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $description;
+     #[ORM\Column(type:Types::DATETIME_IMMUTABLE)]
+    private \DateTimeInterface $created_at;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $created_at;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $updated_at;
+     #[ORM\Column(type:Types::DATETIME_IMMUTABLE)]
+    private \DateTimeInterface $updated_at;
 
     public function getId(): ?int
     {

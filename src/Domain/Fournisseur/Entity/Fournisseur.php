@@ -5,14 +5,14 @@ namespace App\Domain\Fournisseur\Entity;
 use App\Domain\Fournisseur\FournisseurRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Domain\Article\Article;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass=FournisseurRepository::class)
- */
+
+ #[ORM\Entity(repositoryClass:FournisseurRepository::class)]
 class Fournisseur
 {
     public function __toString()
@@ -20,22 +20,19 @@ class Fournisseur
         return $this->name;
     }
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\Length(min=2, max=255)
-     */
-    private $name;
+     #[ORM\Id]
+     #[ORM\GeneratedValue]
+     #[ORM\Column(type:Types::INTEGER)]
+    private int $id;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Article::class, mappedBy="fournisseur")
-     */
+
+     #[ORM\Column(type:Types::STRING, length:255)]
+     #[Assert\Length(min:2, max:255)]
+    private string $name;
+
+
+    #[ORM\OneToMany(mappedBy: "fournisseur", targetEntity: Article::class)]
     private $article;
 
     public function __construct()

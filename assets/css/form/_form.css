@@ -70,3 +70,36 @@ input.is-invalid {
   color: rgba(255, 0, 0, 0.712);
   border: 1px solid var(--red);
 }
+
+input[type='checkbox'].form-toggle{
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+.form-check label{
+  color: transparent;
+  display: inline-block;
+  width: 60px;
+  height: 30px;
+  border-radius: 30px;
+  position: relative;
+  background-color: #2bea14;
+  cursor: pointer;
+}
+.form-check label:before{
+  transition-duration: 300ms;
+  content: '';
+  position: absolute;
+  color: transparent;
+  top: 4px;
+  left: 4px;
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+  border-radius: 30px;
+  background-color: #ffffff;
+}
+input[type='checkbox']:checked + label:before{
+  left: 32.5px;
+}

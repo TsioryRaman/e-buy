@@ -34,6 +34,7 @@ class ArticleNormalizer implements NormalizerInterface{
         return [
             'id' => (string)$object->getId(),
             'name' => $object->getName(),
+            'brand' => $object->getBrand(),
             'description' => $object->getDescription(),
             'category' => $object->getCategory()->getName(),
             'address' => $object->getAddress(),

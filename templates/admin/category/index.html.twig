@@ -1,0 +1,60 @@
+{% extends "admin/base_admin.html.twig" %}
+
+{% block title 'Gestion des categories' %}
+
+{% block header %}
+	<h1 class="text-2xl py-6 mt-4 mb-8 flex flex-row items-center gap-2 text-gray-400 cursor-default"><Icon-feather name="list" class="text-gray-600" size="24"></Icon-feather>Liste des categories</h1>
+{% endblock %}
+{% block body %}
+	<div class="flex flex-row justify-between">
+		<form action="{{ path('admin.category.index') }}" class="relative cursor-pointer items-center flex flex-row justify-center ">
+			<input type="text" class="px-8" name="q" value="{% if q|default(null) %}{{ q }}{% endif %}" id="search_article" placeholder="Rechercher">
+			<button type="submit" class="absolute right-4">
+				<label class="text-gray-200 top-50"><Icon-feather name="search"></Icon-feather></label>
+			</button>
+		</form>
+		<a href="{{ path("admin.category.new") }}" class="bg-green-400 pl-2 pr-4 py-2 shadow-sm rounded-md inline-block text-white hover:bg-green-500 duration-200 flex flex-row mb-4"><Icon-feather name="plus" size="24"></Icon-feather>Ajouter</a>
+	</div>
+		<div class=" px-0  overflow-x-hidden ">
+			<table class="table-auto cursor-pointer">
+				<thead class=" text-gray-400 text-normal">
+				<tr>
+					<th class="w-2/6 py-6 text-left rounded-tl-lg">Id</th>
+					<th class="w-2/6 text-left py-6">Nom</th>
+					<th class="w-3/6 text-left py-6">Description</th>
+					<th class="w-1/6  py-6 rounded-tr-lg">Action</th>
+				</tr>
+				</thead>
+				<tbody>
+				{% for row in rows %}
+					<tr class="even:bg-white group odd:bg-green-100 text-left py-8 px-2 text-gray-700 hover:bg-green-300 cursor-pointer hover:text-white duration-150 border-b-green-50 border-b">
+						<td class="py-6 w-2/6">
+							<h2 class="text-md font-medium ml-4">{{row.id}}</h2>
+						</td>
+						<td class="py-6 w-2/6">
+							<h2 class="text-md font-medium ml-4">{{row.name}}</h2>
+						</td>
+						<td class="w-2/6">
+							<p class="mb-2 text-sm truncate max-w-xl" >{{row.description}}</p>
+						</td>
+						<td class="w-1/6">
+							<div class="flex w-full items-center justify-center  flex-row gap-1">
+								<a href="{{ path('admin.category.edit', {id:row.id}) }}" class="text-gray-300 group-hover:text-white hover:text-yellow-200 duration-100 w-auto mt-auto inline-block px-4 py-2"><Icon-feather size="20" name="edit"/></a>
+								<form method="POST" action={{path("admin.article.delete",{id:row.id} )}} onsubmit="return confirm('Voulez-vous vraiment supprimer ce contenu')">
+								<input type="hidden" name="_method" value="DELETE"/>
+								<input type="hidden" name="_csrf_token" value="{{csrf_token('delete' ~ row.id	)}}"/>
+								<button type="submit" class="text-gray-300 group-hover:text-white w-auto mt-auto inline-block px-4 py-2 duration-100">
+									<Icon-feather size="20" name="trash"/>
+								</button>
+								</form>
+							</div>
+						</td>
+					</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+			<div class="flex mt-8">
+				{{ knp_pagination_render(rows) }}
+			</div>
+		</div>
+{% endblock %}

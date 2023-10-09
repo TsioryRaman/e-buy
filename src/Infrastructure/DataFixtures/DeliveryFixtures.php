@@ -1,10 +1,9 @@
 <?php
 
-namespace App\DataFixtures;
+namespace App\Infrastructure\DataFixtures;
 
 use App\Domain\Delivery\Entity\Delivery;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker;
 
@@ -20,8 +19,8 @@ class DeliveryFixtures extends Fixture
 
         for($i = 0; $i<10;$i++)
         {
-            $delivery = new Delivery();
-            $delivery->setName($faker->name);
+            $delivery = (new Delivery())
+                            ->setName($faker->name);
             $manager->persist($delivery);
 
             $this->addReference(Delivery::class . $i,$delivery);

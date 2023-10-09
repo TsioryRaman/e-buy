@@ -2,7 +2,7 @@
 
 namespace App\Infrastructure\Search\Subscriber;
 
-use App\Domain\Article\Event\ArticleUpdateEvent;
+use App\Domain\Article\Event\ArticleUpdatedEvent;
 use App\Infrastructure\Search\IndexerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -17,11 +17,11 @@ class IndexerSubscriber implements EventSubscriberInterface{
     public static function getSubscribedEvents()
     {
         return [
-            ArticleUpdateEvent::class => ['indexContent']
+            ArticleUpdatedEvent::class => ['indexContent']
         ];
 }
 
-    public function indexContent(ArticleUpdateEvent $event)
+    public function indexContent(ArticleUpdatedEvent $event)
     {
         $data = $this->normalizer->normalize($event->getArticle(), 'search');
         $this->indexer->index($data);

@@ -1,0 +1,22 @@
+{% extends "admin/base_admin.html.twig" %}
+
+{% block title 'Modification des categories | e-shop' %}
+
+{% block body %}
+
+	<div class="container">
+		<h1 class="text-2xl px-4 py-6 font-medium mt-4 mb-8">Edition categorie</h1>
+		{{form_start(form)}}
+		<div class="flex">
+			{{form_row(form.name)}}
+		</div>
+		<div class="flex w-full">
+			{{form_row(form.description)}}
+		</div>
+		{{form_rest(form)}}
+		<button class="px-4 mt-4 py-2 text-white rounded hover:bg-green-400 shadow-sm duration-300 bg-green-500">Enregister</button>
+
+		{{form_end(form)}}
+	</div>
+
+{% endblock %}

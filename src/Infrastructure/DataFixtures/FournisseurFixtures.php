@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DataFixtures;
+namespace App\Infrastructure\DataFixtures;
 
 use App\Domain\Fournisseur\Entity\Fournisseur;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -18,8 +18,8 @@ class FournisseurFixtures extends Fixture
         $k = 0;
         for($i = 0; $i < 10; $i++)
         {
-            $fournisseur = new Fournisseur();
-            $fournisseur->setName($faker->company);
+            $fournisseur = (new Fournisseur())
+                            ->setName($faker->company);
 
 
             $manager->persist($fournisseur);

@@ -2,11 +2,16 @@
 
 namespace App\Http\Twig;
 
+use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 class TwigExtension extends AbstractExtension
 {
+    public function __construct(private readonly RequestStack $requestStack)
+    {
+    }
+
     public function getFunctions(): array
     {
         return [
@@ -39,8 +44,10 @@ class TwigExtension extends AbstractExtension
      */
     public function menuActive(array $context, string $name): string
     {
-        if (($context['menu'] ?? null) === $name) {
-            return 'text-green-500';
+        $route = $this->requestStack->getCurrentRequest()->get('_route');
+        if (($route ?? null) === $name) {
+            
+            return 'aria-current="page"';
         }
 
         return '';

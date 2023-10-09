@@ -6,6 +6,7 @@ use App\Domain\Commande\Entity\Commande;
 use App\Domain\Auth\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -14,43 +15,37 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 
 
-/**
- * @ORM\Entity(repositoryClass=UserRepository::class)
- * @UniqueEntity("email")
- */
+ #[ORM\Entity(repositoryClass:UserRepository::class)]
+ #[UniqueEntity("email")]
 class User implements UserInterface,PasswordAuthenticatedUserInterface
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255, unique=true)
-     * @Assert\Email(
-     *     message = "L'email '{{ value }}' n'est pas un email valide"
-     * )
-     * @Assert\NotBlank
-     */
-    private $email;
+     #[ORM\Id]
+     #[ORM\GeneratedValue]
+     #[ORM\Column(type:Types::INTEGER)]
+    private int $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\Length(
-     *      min = 5,
-     *      max = 255,
-     *      minMessage = "Vous devez entrer un mot de passe superieur a 5 caracters",
-     *      maxMessage = "Votre mot de passe ne doit pas depasser 255 caracteres"
-     * )
-     */
-    private $password;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Commande::class, mappedBy="user")
-     */
-    private $commandes;
+     #[ORM\Column(type:Types::STRING, length:255, unique:true)]
+     #[Assert\Email(
+         message : "L'email '{{ value }}' n'est pas un email valide"
+     )]
+     #[Assert\NotBlank]
+     private string $email;
+
+
+      #[ORM\Column(type:Types::STRING, length:255)]
+      #[Assert\Length(
+           min : 5,
+           max : 255,
+           minMessage : "Vous devez entrer un mot de passe superieur a 5 caracters",
+           maxMessage : "Votre mot de passe ne doit pas depasser 255 caracteres"
+      )]
+
+    private string $password;
+
+    #[ORM\OneToMany(mappedBy: "user", targetEntity: Commande::class)]
+    private Collection $commandes;
 
     public function __construct()
     {

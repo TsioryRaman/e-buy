@@ -7,10 +7,9 @@ export class Icon extends HTMLElement {
         let name = this.getAttribute('name')
         let classes = this.getAttribute('class') || null
 
-        let color = this.getAttribute('color') || 'white'
         const href = `/assets/icons/sprite.svg#${name}`
         this.innerHTML = `
-            <svg stroke="${color}" height=${size} class=${classes} width=${size}>
+            <svg height=${size} class=${classes} width=${size}>
                 <use xlink:href=${href} />
             </svg>
         `

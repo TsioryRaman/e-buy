@@ -13,6 +13,7 @@ class TypesenseIndexer implements IndexerInterface
         'fields' => [
             ['name' => 'name', 'type' => 'string'],
             ["name" => 'description', 'type' => 'string'],
+            ["name" => 'brand', 'type' => 'string'],
             ['name' => 'category', 'type' => 'string'],
             ['name' => 'address', 'type' => 'string'],
             ['name' => 'store', 'type' => 'string[]'],
@@ -24,7 +25,7 @@ class TypesenseIndexer implements IndexerInterface
     /**
      * @param TypesenseClient $client
      */
-    public function __construct(private TypesenseClient $client)
+    public function __construct(private readonly TypesenseClient $client)
     {
     }
 
@@ -45,7 +46,7 @@ class TypesenseIndexer implements IndexerInterface
                 // Si le status est 404 mais que la collection existe deja
             } elseif ($exception->status === Response::HTTP_NOT_FOUND) {
                 $this->client->post("collections/content/documents", $data);
-                // Sinon, on leve une exeption :(
+                // Sinon, on leve une exception :(
             } else {
                 throw $exception;
             }

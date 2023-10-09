@@ -1,0 +1,23 @@
+{% extends "admin/base_admin.html.twig" %}
+
+{% block title 'Creation de nouveau categorie | e-buy' %}
+
+{% block header %}
+    <h1 class="text-2xl py-6 mt-4 mb-8 flex flex-row items-center gap-2 text-gray-400 cursor-default"><Icon-feather name="plus" size="24"></Icon-feather>Ajouter une nouvelle categorie</h1>
+{% endblock %}
+
+{% block body %}
+
+        {{form_start(form)}}
+        <div class="flex w-full">
+            {{form_row(form.name)}}
+        </div>
+        <div class="flex w-full">
+            {{form_row(form.description)}}
+        </div>
+        {{form_rest(form)}}
+        <button class="px-4 mt-4 py-2 text-white rounded hover:bg-green-400 shadow-sm duration-300 bg-green-500">Creer</button>
+
+        {{form_end(form)}}
+
+{% endblock %}

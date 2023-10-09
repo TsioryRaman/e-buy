@@ -15,7 +15,7 @@ class TypesenseSearch implements SearchInterface{
     {
         $q = urlencode($q);
         // http://typesense:8108/collections/content/documents/search?q=ts&query_by=name
-        $data = $this->client->get("collections/content/documents/search?q={$q}&query_by=name,category,description,address&limit=20");
+        $data = $this->client->get("collections/content/documents/search?q={$q}&query_by=name,category,description,address&limit=20&num_typos=1");
         return $data;
     }
 

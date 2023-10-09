@@ -3,86 +3,83 @@
 namespace App\Http\Admin\Controller;
 
 use App\Domain\Article\Article;
-use App\Domain\Article\ArticleRepository;
-use App\Domain\Article\Event\ArticleUpdateEvent;
-use App\Domain\CategoryRepository;
-use App\Form\ArticleType;
-use DateTime;
-use Doctrine\ORM\EntityManagerInterface;
-use Knp\Component\Pager\PaginatorInterface;
-use Psr\EventDispatcher\EventDispatcherInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Domain\Article\Event\ArticleCreatedEvent;
+use App\Domain\Article\Event\ArticleDeletedEventEvent;
+use App\Domain\Article\Event\ArticleUpdatedEvent;
+use App\Http\Admin\Data\ArticleCrudData;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ArticleController extends AbstractController
+/**
+ * @Route("/admin/", name="admin.")
+ */
+class ArticleController extends CrudController
 {
-    /**
-     * Undocumented function
-     *
-     * @param ArticleRepository $articeRepository
-     * @param CategoryRepository $categoryRepository
-     * @param EntityManagerInterface $manager
-     */
-    public function __construct(
-        private ArticleRepository $articleRepository,
-        private CategoryRepository $categoryRepository,
-        private EntityManagerInterface $manager,
-        private PaginatorInterface $paginator,
-        private EventDispatcherInterface $dispatcher
-    ) {
-    }
+
+    protected string $templatePath = 'article';
+    protected string $entity = Article::class;
+    protected string $routePrefix = 'admin.article';
+    protected array $events = [
+        'update' => ArticleUpdatedEvent::class,
+        'delete' => ArticleDeletedEventEvent::class,
+        'create' => ArticleCreatedEvent::class
+    ];
 
     /**
-     * @Route(path="admin", name="admin.article", methods="GET")
-     */
-    public function show(Request $request)
-    {
-        $articles = $this->paginator
-                        ->paginate(
-                            $this->articleRepository->findLatest(),
-                            $request->query->getInt('page',1),
-                        12);
-        return $this->render('admin/article/index.html.twig', ["articles" => $articles]);
-    }
-
-    /**
-     * @Route(path="admin/article/edit/{id}", name="admin.article.edit")
+     * @Route(path="article/edit/{id}", name="article.edit")
      */
     public function edit(
         Article $article,
-        Request $request
-    ) {
-        /**
-         * Creation des formulaires
-         * @var $form FormInterface
-         */
-        $form = $this->createForm(ArticleType::class, $article);
-        $form->handleRequest($request);
-
-        // Soumission des formulaires et validation
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->manager->flush();
-            $this->dispatcher->dispatch(new ArticleUpdateEvent($article),ArticleUpdateEvent::class);
-            return $this->redirectToRoute('admin.article');
-        }
-
-        return $this->renderForm('admin/article/edit.html.twig', [
-            'form' => $form
-        ]);
+    ): Response {
+        $data = ArticleCrudData::makeFromPost($article);
+        $data->entity = $article;
+        return $this->crudEdit($data);
     }
 
     /**
-     * @Route("admin/article/delete/{id}", "admin.article.delete", methods={"DELETE"})
+     * @Route("article/delete/{id}", "article.delete", methods="POST")
      */
-    public function delete(
-        Article $article
-    ) {
-        /**
-         * Creation des formulaires
-         * @var $form FormInterface
-         */
-        dd("Suppresion");
-        return $this->redirectToRoute('admin.article');
+    public function delete(Article $article): Response {
+        $data = new ArticleCrudData();
+        $data->entity = $article;
+        return $this->crudDelete($data);
+    }
+
+    /**
+     * @Route(path="article", name="article.index", methods="GET")
+     */
+    public function show(Request $request): Response
+    {
+        $q = $request->get('q');
+        if($q){
+            $query = $request->get('q');
+            /** @var QueryBuilder $query */
+            $query = $this->getRepository()
+                ->createQueryBuilder('row')
+                ->where(
+                    $this->getRepository()->createQueryBuilder('r')
+                        ->expr()->like('row.name',':search')
+                )
+                ->setParameter('search','%' . $query . '%');
+
+            return $this->crudIndex($query,12,['q'=>$q]);
+        }
+        /** @var QueryBuilder $query */
+        $query = $this->getRepository()->findLatest();
+
+        return $this->crudIndex($query);
+    }
+
+    /**
+     * @Route("article/new", name="article.new")
+     */
+    public function newArticle(): Response{
+        $article = new Article();
+        $articleData = new ArticleCrudData();
+        $articleData->entity = $article;
+
+        return $this->crudNew($articleData);
     }
 }
