@@ -1,5 +1,4 @@
 @import "./form/_form.css";
-@import "./form/_login.css";
 @import "../icons/icons.css";
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Luckiest+Guy&family=Roboto+Mono:ital,wght@0,400;1,600&display=swap');
 
@@ -41,5 +40,5 @@
 }
 
 .font__luckiest {
-    font-family: 'Luckiest Guy', cursive;
+    font-family: 'Luckiest Guy', 'sans-serif','system-ui', cursive;
 }

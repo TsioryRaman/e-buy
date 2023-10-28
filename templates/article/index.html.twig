@@ -1,59 +1,72 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Article -
-	{{article.name}}
+    {{ article.name }}
 {% endblock %}
 
 {% block body %}
 
-	<div class="container mt-4 flex flex-col text-gray-700 px-4 py-4">
-		<div class="grid grid-cols-[50%_50%] gap-8">
-			<div class="mt-12 flex flex-col gap-4">
-				<h1 class="text-4xl flex text-gray-300 flex-col">
-				Nom du produit:<br/>
-				<strong class="text-gray-600 mt-4 cursor-pointer text-8xl">{{article.name}}</strong>
-				</h1>
-				<div class="text-md">
-					<strong class="text-2xl mb-12">Description:</strong>
-					<span class="line-clamp-6 text-xl cursor-pointer">
-					{{article.description}}
-
+    <div class="container mt-4 flex flex-col text-gray-700 px-4 py-4">
+        <div class="md:grid md:grid-cols-[50%_50%] flex flex-col gap-8">
+            <div class="mt-12 flex flex-col gap-4">
+                <h1 class="text-4xl flex text-gray-300 flex-col">
+                    Nom du produit:<br/>
+                    <strong class="text-gray-600 mt-4 cursor-pointer text-4xl md:text-8xl">{{ article.name }}</strong>
+                </h1>
+                <div class="text-md">
+                    <strong class="md:text-2xl text-xl mb-12">Description:</strong>
+                    <span class="line-clamp-6 md:text-xl capitalize cursor-pointer">
+					{{ article.description }}
 					</span>
-				</div>
-			</div>
-			<div class="col-start-2 flex flex-col  ">
-				<div class="shadow overflow-hidden h-84">
+                </div>
+            </div>
+            <div class="col-start-2 relative flex flex-col  ">
+                <div class="shadow overflow-hidden h-84">
+                    {% if app.user %}
+                        <div class="absolute top-2 cursor-pointer right-3 text-pink-500 z-10">
+                            {#                        <Icon-feather class="heart__icon" name="heart"></Icon-feather> #}
+                            <like-article
+                                    data-article="{{ article.id }}"
+                                    data-liked="{% for liked_by in article.likeBy %}
+                                {% if liked_by.id == app.user.id %}
+                                true
+                                {% endif %}
+                            {% endfor %}
+                    ">
+                            </like-article>
+                        </div>
+                    {% endif %}
+                    {% if article.attachment|default(null) %}
+                        <img class="hover:scale-125 duration-300 rounded bg-center bg-no-repeat bg-contain"
+                             src="{{ vich_uploader_asset(article.attachment[0],'imageFile') | imagine_filter('preview') }} "
+                             alt="">
+                    {% else %}
+                        <img src="{{ "/images/articles/default.jpg" | imagine_filter('preview') }}" width="100%"
+                             height="auto" alt="">
+                    {% endif %}
+                </div>
+                <div class="flex md:justify-between md:items-center mt-12 flex-col md:flex-row">
+                    <div class="self-end text-4xl">
+                        Price :
+                        <strong class="text-6xl"> {{ article.price }}</strong>
+                        $
+                    </div>
+                    <article-commande data-quantity="{{ article.quantity }}"></article-commande>
+                    <form action="" class="self-end mt-4">
+                        <button class="flex hover:bg-green-500 duration-100 flex gap-2 flex-row px-4 py-2 bg-green-400 rounded shadow text-white flex-row">
+                            Ajouter
+                            <Icon-feather name="cart"></Icon-feather>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="flex w-2/4 flex-col justify-between">
+            <div><strong>Categorie:</strong> {{ article.category.name }}</div>
+            <div><strong>Fornisseur:</strong> {{ article.fournisseur.name }}</div>
+            <div><strong>Quantite restant:</strong> {{ article.quantity }}</div>
 
-					{% if article.attachment|default(null) %}
-						<img class="hover:scale-125 duration-300 rounded bg-center bg-no-repeat bg-contain" src="{{vich_uploader_asset(article.attachment[0],'imageFile') | imagine_filter('preview')}} " alt="">
-					{% else %}
-						<img src="{{ "/images/articles/default.jpg" | imagine_filter('preview') }}" width="100%" height="auto" alt="">
-					{% endif %}
+        </div>
 
-				</div>
-				<div class="flex justify-between items-center  mt-12 flex-row">
-
-					<div class="self-end text-4xl">
-						Price :
-						<strong class="text-6xl"> {{article.price}}</strong>
-						$
-					</div>
-					<form action="">
-						<button class="flex hover:bg-green-500 duration-100 flex gap-2 flex-row px-4 py-2 bg-green-400 rounded shadow text-white flex-row">
-							Ajouter<Icon-feather name="cart"></Icon-feather>
-						</button>
-					</form>
-				</div>
-			</div>
-
-		</div>
-		<div class="flex w-2/4 flex-col justify-between">
-
-				<div><strong>Categorie:</strong>  {{article.category.name}}</div>
-				<div><strong>Fornisseur:</strong> {{article.fournisseur.name}}</div>
-				<div><strong>Quantite restant:</strong> {{article.quantity}}</div>
-
-		</div>
-
-	</div>
+    </div>
 {% endblock %}

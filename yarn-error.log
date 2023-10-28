@@ -1,0 +1,59 @@
+Arguments: 
+  /home/tsiory/.nvm/versions/node/v16.20.1/bin/node /home/tsiory/.nvm/versions/node/v16.20.1/bin/yarn
+
+PATH: 
+  /home/tsiory/.nvm/versions/node/v16.20.1/bin:/home/tsiory/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  16.20.1
+
+Platform: 
+  linux x64
+
+Trace: 
+  Error: self signed certificate in certificate chain
+      at TLSSocket.onConnectSecure (node:_tls_wrap:1539:34)
+      at TLSSocket.emit (node:events:513:28)
+      at TLSSocket._finishInit (node:_tls_wrap:953:8)
+      at TLSWrap.ssl.onhandshakedone (node:_tls_wrap:734:12)
+
+npm manifest: 
+  {
+    "name": "vite-app",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+      "dev": "vite --port 3000 --host=0.0.0.0",
+      "build": "vite build",
+      "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+      "preview": "vite preview"
+    },
+    "dependencies": {
+      "@tailwindcss/line-clamp": "^0.4.4",
+      "react": "^18.2.0",
+      "react-dom": "^18.2.0"
+    },
+    "devDependencies": {
+      "@types/react": "^18.2.15",
+      "@types/react-dom": "^18.2.7",
+      "@vitejs/plugin-react": "^4.0.3",
+      "autoprefixer": "^10.4.15",
+      "eslint": "^8.45.0",
+      "eslint-plugin-react": "^7.32.2",
+      "eslint-plugin-react-hooks": "^4.6.0",
+      "eslint-plugin-react-refresh": "^0.4.3",
+      "postcss": "^8.4.29",
+      "tailwindcss": "^3.3.3",
+      "vite": "2.0.1"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

@@ -3,20 +3,10 @@
 namespace App\Http\Admin\Controller;
 
 use App\Domain\Article\Article;
-use App\Domain\Article\ArticleRepository;
-use App\Domain\Article\Event\ArticleCreatedEvent;
-use App\Domain\Article\Event\ArticleDeletedEventEvent;
-use App\Domain\Article\Event\ArticleUpdatedEvent;
 use App\Domain\Category;
-use App\Domain\CategoryRepository;
-use App\Form\ArticleType;
-use App\Http\Admin\Data\ArticleCrudData;
 use App\Http\Admin\Data\CategoryCrudData;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
-use Knp\Component\Pager\PaginatorInterface;
-use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;

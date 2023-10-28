@@ -49,7 +49,7 @@
                     <td class="w-1/6">
                         <div class="flex w-full items-center justify-center  flex-row gap-1">
                             <a href="{{ path('admin.article.edit', {id:row.id}) }}"
-                               class="text-gray-300 hover:text-yellow-200 group-hover:text-white duration-100 w-auto mt-auto inline-block px-4 py-2">
+                               class="text-gray-300 hover:text-yellow-400 group-hover:text-white duration-100 w-auto mt-auto inline-block px-4 py-2">
                                 <Icon-feather size="20" name="edit"></Icon-feather>
                             </a>
                             <form method="POST" action={{ path("admin.article.delete",{id:row.id} ) }} onsubmit="return

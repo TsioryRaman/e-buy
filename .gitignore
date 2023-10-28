@@ -10,6 +10,8 @@
 /vendor/
 /assets/icons/feather/
 /public/assets/
+/.pnpm-store
+/assets/icons/feather
 ###< symfony/framework-bundle ###
 
 ###> phpunit/phpunit ###

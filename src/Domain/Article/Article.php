@@ -2,17 +2,20 @@
 
 namespace App\Domain\Article;
 
+use App\Domain\Article\repository\ArticleRepository;
 use App\Domain\Attachement\Attachment;
+use App\Domain\Cart\Cart;
+use App\Domain\Cart\CartArticle;
 use App\Domain\Category;
 use App\Domain\Commande\Entity\Commande;
 use App\Domain\Fournisseur\Entity\Fournisseur;
 use App\Domain\Store\Entity\Store;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use \App\Domain\Auth\User;
 
 
 #[Vich\Uploadable]
@@ -70,9 +73,22 @@ class Article
     #[ORM\OneToMany(mappedBy: 'article', targetEntity: Attachment::class, cascade: ['persist', 'remove'])]
     private Collection $attachment;
 
+    #[ORM\OneToMany(mappedBy: 'article', targetEntity: ArticleView::class)]
+    private Collection $articleViews;
+
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'article_liked')]
+    #[ORM\JoinTable(name: 'article_like')]
+    private Collection $like_by;
+
+    #[ORM\OneToMany(mappedBy: 'article', targetEntity: CartArticle::class)]
+    private Collection $cartArticles;
+
     public function __construct()
     {
         $this->attachment = new ArrayCollection();
+        $this->articleViews = new ArrayCollection();
+        $this->like_by = new ArrayCollection();
+        $this->cartArticles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -287,6 +303,95 @@ class Article
             // set the owning side to null (unless already changed)
             if ($attachment->getArticle() === $this) {
                 $attachment->setArticle(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ArticleView>
+     */
+    public function getArticleViews(): Collection
+    {
+        return $this->articleViews;
+    }
+
+    public function addArticleView(ArticleView $articleView): static
+    {
+        if (!$this->articleViews->contains($articleView)) {
+            $this->articleViews->add($articleView);
+            $articleView->setArticle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArticleView(ArticleView $articleView): static
+    {
+        if ($this->articleViews->removeElement($articleView)) {
+            // set the owning side to null (unless already changed)
+            if ($articleView->getArticle() === $this) {
+                $articleView->setArticle(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getLikeBy(): Collection
+    {
+        return $this->like_by;
+    }
+
+    public function addLikeBy(User $likeBy): static
+    {
+        if (!$this->like_by->contains($likeBy)) {
+            $this->like_by->add($likeBy);
+        }
+
+        return $this;
+    }
+
+    public function removeLikeBy(User $likeBy): static
+    {
+        $this->like_by->removeElement($likeBy);
+
+        return $this;
+    }
+
+    public function getLiked():int
+    {
+        return $this->getLikeBy()->count();
+    }
+
+    /**
+     * @return Collection<int, CartArticle>
+     */
+    public function getCartArticles(): Collection
+    {
+        return $this->cartArticles;
+    }
+
+    public function addCartArticle(CartArticle $cartArticle): static
+    {
+        if (!$this->cartArticles->contains($cartArticle)) {
+            $this->cartArticles->add($cartArticle);
+            $cartArticle->setArticle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCartArticle(CartArticle $cartArticle): static
+    {
+        if ($this->cartArticles->removeElement($cartArticle)) {
+            // set the owning side to null (unless already changed)
+            if ($cartArticle->getArticle() === $this) {
+                $cartArticle->setArticle(null);
             }
         }
 

@@ -6,7 +6,7 @@ use App\Domain\Article\Article;
 use InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class ArticleNormalizer implements NormalizerInterface{
+class ArticleNormalizerSearch implements NormalizerInterface{
 
 
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool

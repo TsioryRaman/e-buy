@@ -8,7 +8,7 @@ services:
         - ./:/var/www/symfony 
         - ./docker/nginx/conf.d:/etc/nginx/conf.d
       ports:
-        - 8082:80
+        - 8000:80
       depends_on: 
         - php-fpm
 
