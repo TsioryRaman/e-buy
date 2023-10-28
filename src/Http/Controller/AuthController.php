@@ -17,7 +17,9 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class AuthController extends AbstractController
 {
 
-    public function __construct(private EntityManagerInterface $manager)
+    const ROLE_USER = ['ROLE_USER'];
+
+    public function __construct(private readonly EntityManagerInterface $manager)
     {
     }
 
@@ -55,7 +57,7 @@ class AuthController extends AbstractController
         Request $request,
         ValidatorInterface $validator,
         UserPasswordHasherInterface $encoder
-    ) {
+    ):Response {
         if ($this->getUser()) {
             return $this->redirectToRoute('home.index');
         }
@@ -75,6 +77,7 @@ class AuthController extends AbstractController
                 )
                     : ''
             );
+            $user->setRoles(self::ROLE_USER);
             $this->manager->persist($user);
             $this->manager->flush();
             return $this->redirectToRoute('app_login');
@@ -92,7 +95,6 @@ class AuthController extends AbstractController
             }
         }
 
-        // dd($form->getErrors());
         return $this->render('auth/register.html.twig', [
             "form" => $form->createView(),
             "error" => $messageError

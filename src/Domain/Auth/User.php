@@ -2,6 +2,8 @@
 
 namespace App\Domain\Auth;
 
+use App\Domain\Article\Article;
+use App\Domain\Article\ArticleView;
 use App\Domain\Commande\Entity\Commande;
 use App\Domain\Auth\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -14,42 +16,51 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
-
- #[ORM\Entity(repositoryClass:UserRepository::class)]
- #[UniqueEntity("email")]
-class User implements UserInterface,PasswordAuthenticatedUserInterface
+#[ORM\Entity(repositoryClass: UserRepository::class)]
+#[UniqueEntity("email")]
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
 
-     #[ORM\Id]
-     #[ORM\GeneratedValue]
-     #[ORM\Column(type:Types::INTEGER)]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: Types::INTEGER)]
     private int $id;
 
 
-     #[ORM\Column(type:Types::STRING, length:255, unique:true)]
-     #[Assert\Email(
-         message : "L'email '{{ value }}' n'est pas un email valide"
-     )]
-     #[Assert\NotBlank]
-     private string $email;
+    #[ORM\Column(type: Types::STRING, length: 255, unique: true)]
+    #[Assert\Email(
+        message: "L'email '{{ value }}' n'est pas un email valide"
+    )]
+    #[Assert\NotBlank]
+    private string $email;
 
 
-      #[ORM\Column(type:Types::STRING, length:255)]
-      #[Assert\Length(
-           min : 5,
-           max : 255,
-           minMessage : "Vous devez entrer un mot de passe superieur a 5 caracters",
-           maxMessage : "Votre mot de passe ne doit pas depasser 255 caracteres"
-      )]
-
+    #[ORM\Column(type: Types::STRING, length: 255)]
+    #[Assert\Length(
+        min: 5,
+        max: 255,
+        minMessage: "Vous devez entrer un mot de passe superieur a 5 caracters",
+        maxMessage: "Votre mot de passe ne doit pas depasser 255 caracteres"
+    )]
     private string $password;
 
     #[ORM\OneToMany(mappedBy: "user", targetEntity: Commande::class)]
     private Collection $commandes;
 
+    #[ORM\Column(type: Types::ARRAY)]
+    private array $roles = [];
+
+    #[ORM\OneToMany(mappedBy: 'view_by', targetEntity: ArticleView::class)]
+    private Collection $article_view;
+
+    #[ORM\ManyToMany(targetEntity: Article::class, mappedBy: 'like_by')]
+    private Collection $article_liked;
+
     public function __construct()
     {
         $this->commandes = new ArrayCollection();
+        $this->article_view = new ArrayCollection();
+        $this->article_liked = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -85,22 +96,20 @@ class User implements UserInterface,PasswordAuthenticatedUserInterface
     {
         return null;
     }
-    
+
     public function getRoles(): array
     {
-        $role = "ROLE_USER";
-
-        return [$role];
+        return array_unique($this->roles);
     }
 
     public function eraseCredentials()
     {
-        
+
     }
 
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return (string)$this->email;
     }
 
     /**
@@ -128,6 +137,70 @@ class User implements UserInterface,PasswordAuthenticatedUserInterface
             if ($commande->getUser() === $this) {
                 $commande->setUser(null);
             }
+        }
+
+        return $this;
+    }
+
+    public function setRoles(array $roles): static
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ArticleView>
+     */
+    public function getArticleView(): Collection
+    {
+        return $this->article_view;
+    }
+
+    public function addArticleView(ArticleView $article): static
+    {
+        if (!$this->article_view->contains($article)) {
+            $this->article_view->add($article);
+            $article->setViewBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArticleView(ArticleView $article_view): static
+    {
+        if ($this->article_view->removeElement($article_view)) {
+            // set the owning side to null (unless already changed)
+            if ($article_view->getViewBy() === $this) {
+                $article_view->setViewBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Article>
+     */
+    public function getArticleLiked(): Collection
+    {
+        return $this->article_liked;
+    }
+
+    public function addArticleLiked(Article $articleLiked): static
+    {
+        if (!$this->article_liked->contains($articleLiked)) {
+            $this->article_liked->add($articleLiked);
+            $articleLiked->addLikeBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArticleLiked(Article $articleLiked): static
+    {
+        if ($this->article_liked->removeElement($articleLiked)) {
+            $articleLiked->removeLikeBy($this);
         }
 
         return $this;

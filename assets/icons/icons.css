@@ -7,3 +7,8 @@ svg.heart__icon:hover{
     fill: transparent;
     stroke: white;
 }
+
+svg.heart__icon_liked {
+    stroke: red !important;
+    fill: red;
+}

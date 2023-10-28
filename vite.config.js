@@ -1,13 +1,12 @@
 import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import {resolve} from 'path'
+import { resolve } from 'path'
 
 const twigRefreshPlugin = {
   name: 'twig-refresh',
-  configureServer ({watcher,ws}) {
+  configureServer({ watcher, ws }) {
     watcher.add(resolve('templates/**/*.twig'))
-    watcher.on('change',function (path) {
-      if(path.endsWith('.twig')) {
+    watcher.on('change', function (path) {
+      if (path.endsWith('.twig')) {
         ws.send({
           type: 'full-reload'
         })
@@ -18,10 +17,10 @@ const twigRefreshPlugin = {
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(),twigRefreshPlugin],
+  plugins: [twigRefreshPlugin],
   cors: true,
   // Specifie le dossier racine
-  root:'./assets',
+  root: './assets',
   // Pour specifier la base de l'url
   base: '/assets/',
   server: {
@@ -30,8 +29,8 @@ export default defineConfig({
     }
   },
   build: {
-    manifest:true,
-    assetsDir:'',
+    manifest: true,
+    assetsDir: '',
     outDir: '../public/assets/',
     rollupOptions: {
       output: {
@@ -39,8 +38,8 @@ export default defineConfig({
       },
       // Pour specifier a vite de trouver le point d'entrer
       input: {
-        'main.js':'./assets/main.js',
-        'tailwind.css':'./assets/css/tailwind.css'
+        'main.js': './assets/main.js',
+        'tailwind.css': './assets/css/tailwind.css'
       }
     }
   }

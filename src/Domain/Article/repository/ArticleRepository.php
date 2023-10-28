@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Domain\Article;
+namespace App\Domain\Article\repository;
 
 use App\Domain\Article\Article;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
-use Doctrine\ORM\Query;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -57,7 +57,25 @@ class ArticleRepository extends ServiceEntityRepository
     public function findLatest():QueryBuilder
     {
         return $this->createQueryBuilder('a')
-                    ->orderBy('a.created_at',"DESC");
+                    ->select('a','at','COUNT(views.id) as view')
+                    ->leftJoin('a.articleViews','views',Join::WITH,'a.id = views.article')
+                    ->leftJoin('a.like_by','u')
+                    ->leftJoin('a.attachment','at')
+                    ->groupBy('a.id')
+                    ->addOrderBy('view',"DESC")
+                    ->addOrderBy('a.created_at',"DESC");
+    }
+
+    public function findArticleWithId(array $array_id):array
+    {
+        $query = $this->createQueryBuilder('a');
+        foreach ($array_id as $key => $id)
+        {
+            $query->orWhere('a.id = :id' . $key)
+                ->setParameter('id' . $key,$id);
+        }
+
+        return $query->getQuery()->getResult();
     }
 
     // /**

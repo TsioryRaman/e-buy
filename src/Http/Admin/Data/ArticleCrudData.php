@@ -53,6 +53,8 @@ class ArticleCrudData implements CrudDataInterface
 
     public ?Collection $attachment = null;
 
+    public ?int $view;
+
     public Article $entity;
 
     public static function makeFromPost(Article $article): self {
@@ -96,16 +98,12 @@ class ArticleCrudData implements CrudDataInterface
             $a->setArticle($this->entity);
         }
 
-
-
-
     }
     public function hydrateNewEntity():void
     {
         $this->hydrate();
         $this->entity->setCreatedAt(new \DateTimeImmutable())
                     ->setUpdatedAt(new \DateTimeImmutable());
-
     }
 
     public function getEntity(): object

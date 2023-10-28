@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Domain\Article\ArticleRepository;
+use App\Domain\Article\repository\ArticleRepository;
 use App\Infrastructure\Search\IndexerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

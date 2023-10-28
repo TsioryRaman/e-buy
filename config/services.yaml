@@ -49,5 +49,8 @@ services:
 
     App\Infrastructure\Search\SearchInterface:
         class: App\Infrastructure\Search\Typesense\TypesenseSearch
+
+    App\Domain\Cart\CartService:
+        class: App\Domain\Cart\CartService
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
