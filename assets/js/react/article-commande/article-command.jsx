@@ -42,17 +42,13 @@ const ArticleCartComponent = ({quantity: _quantity, article, defaultQuantity, us
 
     const onSubmit = (e) => {
         e.preventDefault()
+        e.stopPropagation()
         loadCart('POST', {id: article, quantity: state})
     }
     const handleChange = (e) => {
         e.preventDefault()
         state > quantity ? setState(quantity) : setState(e.target.value === '' ? 0 : e.target.value)
     }
-
-
-    // useEffect(() => {
-    //     setCartQuantity(c => c + (items?.cart_quantity || 0))
-    // },[items])
 
     useEffect(() => {
         setQuantity(q => items?.cart_quantity ? q - items?.cart_quantity : q)
@@ -80,10 +76,10 @@ const ArticleCartComponent = ({quantity: _quantity, article, defaultQuantity, us
                         <Icon name="plus" size="18" className="text-2xl"></Icon>
                     </ArticleIcon>
                 </div>
-                {!defaultQuantity && <form onSubmit={onSubmit}>
-                    <button className="bg-green-400 hover:bg-green-500 duration-150 p-2 rounded shadow text-white"><Icon
-                        size="22" name="cart"/></button>
-                </form>}
+                <button onClick={onSubmit}
+                        className="bg-green-400 hover:bg-green-500 duration-150 p-2 rounded shadow text-white"><Icon
+                    size="22" name="cart"/></button>
+
             </div>}
     </div>
 }

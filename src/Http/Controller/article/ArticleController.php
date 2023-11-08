@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ArticleController extends BaseController
 {
 
-    #[Route('article/{id}','article.show')]
+    #[Route('article/{slug<[a-z0-9\-]+>}-{id<\d+>}','article.show')]
     public function show(Article $article): Response
     {
         $this->dispatcher->dispatch(new ArticleViewEvent($article,$this->getUser()));

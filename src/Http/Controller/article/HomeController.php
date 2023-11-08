@@ -2,6 +2,7 @@
 
 namespace App\Http\Controller\article;
 
+use App\Domain\Article\Article;
 use App\Domain\Article\repository\ArticleRepository;
 use App\Http\Controller\BaseController;
 use Knp\Component\Pager\PaginatorInterface;
@@ -17,6 +18,8 @@ class HomeController extends BaseController
         PaginatorInterface $paginator,
         Request            $request): Response
     {
+        /** @var Article[] $articles */
+        $articles = $articleRepository->findLatest()->getQuery()->getResult();
         $articles = $paginator
             ->paginate(
                 $articleRepository->findLatest(),

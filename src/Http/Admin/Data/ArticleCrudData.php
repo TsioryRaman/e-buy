@@ -8,6 +8,7 @@ use App\Domain\Category;
 use App\Domain\Commande\Entity\Commande;
 use App\Domain\Fournisseur\Entity\Fournisseur;
 use App\Form\ArticleType;
+use Cocur\Slugify\Slugify;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -53,6 +54,8 @@ class ArticleCrudData implements CrudDataInterface
 
     public ?Collection $attachment = null;
 
+    public string $slug;
+
     public ?int $view;
 
     public Article $entity;
@@ -92,6 +95,7 @@ class ArticleCrudData implements CrudDataInterface
             ->setPostalCode($this->postalCode)
             ->setQuantity($this->quantity)
             ->setCategory($this->category)
+            ->setSlug((new Slugify())->slugify($this->name))
             ->setUpdatedAt(new \DateTimeImmutable());
 
         foreach ($this->attachment as $a){

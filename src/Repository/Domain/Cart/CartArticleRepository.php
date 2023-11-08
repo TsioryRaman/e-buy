@@ -4,6 +4,7 @@ namespace App\Repository\Domain\Cart;
 
 use App\Domain\Cart\CartArticle;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -45,4 +46,16 @@ class CartArticleRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+    public function findCartList()
+    {
+        return $this->createQueryBuilder('ca')
+            ->select('ca, c, a')
+            ->leftJoin('ca.article','a',Join::WITH)
+            ->leftJoin('ca.cart','c',Join::WITH,'c.id = ca.cart')
+            ->where('c.submitted = :submitted')
+            ->setParameter('submitted',false)
+            ->orderBy('ca.quantity','DESC')
+            ->getQuery()
+            ->getResult();
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Api;
 
+use App\Domain\Auth\User;
 use App\Domain\Cart\ArticleMoreThanQuantityException;
 use App\Domain\Cart\CartData;
 use App\Domain\Cart\service\CartService;
@@ -33,8 +34,10 @@ class CartApiController extends AbstractController
         $content = json_decode($request->getContent(),true);
         /** @var CartData $cart */
         $cart = $this->normalizer->denormalize($content,CartData::class);
+        /** @var User $user */
+        $user = $this->getUser();
         try {
-            $this->service->addArticle($cart);
+            $this->service->addArticle($cart,$user);
             return $this->json($this->service->getCurrentArticle($cart),Response::HTTP_OK);
         }catch (ArticleMoreThanQuantityException $e)
         {

@@ -8,7 +8,6 @@
         Uploader des images
     </label>
     <div class="flex flex-row">
-
         {% for a in form.attachment %}
             {% if  a.vars.data.filename|default(null) %}
                 <img src="{{ vich_uploader_asset(a.vars.data,'imageFile') }}" class="rounded shadow" height="200px" width="200px" alt="">

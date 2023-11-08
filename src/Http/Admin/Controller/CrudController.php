@@ -65,6 +65,7 @@ class CrudController extends AbstractController
             if($this->events['create'] ?? null) {
                 $this->dispatcher->dispatch(new $this->events['create']($entity));
             }
+            $this->addFlash('success','Votre ' . $this->entity . ' cree avec success');
 
             return $this->redirectAfterSave($entity);
         }
@@ -80,7 +81,6 @@ class CrudController extends AbstractController
         $request = $this->requestStack->getCurrentRequest();
         $form = $this->createForm($data->getForm(),$data);
         $form->handleRequest($request);
-
         if($form->isSubmitted() && $form->isValid()){
             $entity = $data->getEntity();
             $old = clone $entity;
@@ -90,7 +90,7 @@ class CrudController extends AbstractController
             if($this->events['update'] ?? null) {
                 $this->dispatcher->dispatch(new $this->events['update']($data->getEntity(),$old));
             }
-
+            $this->addFlash('success',$this->entity . ' edite avec success');
             return $this->redirectAfterSave($entity);
         }
 
@@ -108,6 +108,7 @@ class CrudController extends AbstractController
         if($request->get('_method') === Request::METHOD_DELETE && $result){
             $this->em->remove($entity);
             $this->em->flush();
+            $this->addFlash('error',$this->entity . ' supprimer');
         }
 
         return $this->redirectToRoute($this->routePrefix.'.index');

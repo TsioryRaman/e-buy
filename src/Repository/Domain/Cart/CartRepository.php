@@ -4,6 +4,7 @@ namespace App\Repository\Domain\Cart;
 
 use App\Domain\Cart\Cart;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -21,20 +22,29 @@ class CartRepository extends ServiceEntityRepository
         parent::__construct($registry, Cart::class);
     }
 
-//    /**
-//     * @return Cart[] Returns an array of Cart objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('c.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    /**
+     * @return Cart|null
+     */
+    public function findLastCartNotSubmitted(): Cart|null
+    {
+        return $this->createQueryBuilder('c')
+            ->where('c.submitted = :submitted')
+            ->setParameter('submitted',false)
+            ->orderBy('c.created_at','DESC')
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
+    public function findArticleNotPurchased(int $userId): Cart|null
+    {
+        return $this->createQueryBuilder('c')
+                ->where('c.user = :user')
+                ->setParameter(':user',$userId)
+                ->andWhere('c.submitted = 0')
+                ->getQuery()
+                ->getSingleResult();
+    }
 
 //    public function findOneBySomeField($value): ?Cart
 //    {

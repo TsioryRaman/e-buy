@@ -1,7 +1,9 @@
 <?php
+
 namespace App\Http\Controller;
 
 use App\Domain\Cart\service\CartService;
+use App\Repository\Domain\Cart\CartArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Knp\Component\Pager\PaginatorInterface;
@@ -10,7 +12,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 
-class BaseController extends AbstractController{
+class BaseController extends AbstractController
+{
 
     public string $entity = '';
 
@@ -23,10 +26,11 @@ class BaseController extends AbstractController{
      */
     public function __construct(
         public readonly EventDispatcherInterface $dispatcher,
-        public readonly PaginatorInterface $paginator,
-        public readonly EntityManagerInterface $manager,
-        public readonly RequestStack $requestStack,
-        public readonly CartService $cartService,
+        public readonly PaginatorInterface       $paginator,
+        public readonly EntityManagerInterface   $manager,
+        public readonly RequestStack             $requestStack,
+        public readonly CartService              $cartService,
+        public readonly CartArticleRepository    $articleRepository
     )
     {
     }

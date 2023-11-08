@@ -1,7 +1,6 @@
 
 const cart = document.querySelector('#cart-notification')
 export const CartNotification = () => {
-    console.log(cart)
     if(cart)
     {
         let cart_item = parseInt(cart.dataset.cart) || 0

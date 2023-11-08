@@ -3,6 +3,7 @@
 namespace App\Repository\Domain\Article;
 
 use App\Domain\Article\ArticleView;
+use App\Domain\Auth\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,6 +20,25 @@ class ArticleViewRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, ArticleView::class);
+    }
+
+    public function findIfUserViewArticle(int $articleId,?User $user): ArticleView|null
+    {
+        $query =  $this->createQueryBuilder('av')
+            ->select('av')
+            ->where('av.article = :articleId')
+            ->setParameter('articleId',$articleId);
+        if($user !== null)
+        {
+            $query
+                ->andWhere('av.view_by = :userId')
+                ->setParameter('userId',$user->getId());
+        }else{
+            $query->andWhere('av.view_by is NULL');
+        }
+        return $query
+                    ->getQuery()
+                    ->getOneOrNullResult();
     }
 
 //    /**

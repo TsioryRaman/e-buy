@@ -15,11 +15,15 @@ class ArticleView
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'article')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'article')]
+    #[ORM\JoinColumn(nullable: true)]
     private ?User $view_by = null;
 
-    #[ORM\ManyToOne(inversedBy: 'articleViews')]
+    #[ORM\ManyToOne(targetEntity: Article::class, inversedBy: 'articleViews')]
     private ?Article $article = null;
+
+    #[ORM\Column]
+    private ?int $view_number = 0;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
@@ -83,5 +87,26 @@ class ArticleView
         $this->updated_at = $updated_at;
 
         return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getViewNumber(): ?int
+    {
+        return $this->view_number;
+    }
+
+    /**
+     * @param int|null $view_number
+     */
+    public function setViewNumber(?int $view_number): void
+    {
+        $this->view_number = $view_number;
+    }
+
+    public function incrementViewNumber(): void
+    {
+        $this->view_number +=1;
     }
 }

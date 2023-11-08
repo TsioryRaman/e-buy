@@ -1,4 +1,4 @@
-export const enabledRoute = function ()
+(function ()
 {
     let links = document.querySelectorAll("#link");
     links.forEach(link => {
@@ -6,4 +6,4 @@ export const enabledRoute = function ()
             link.classList.add('text-green-500')
         }
     })
-}
+})()

@@ -17,16 +17,34 @@ class Cart
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToMany(mappedBy: 'cart', targetEntity: CartArticle::class)]
+    #[ORM\OneToMany(mappedBy: 'cart', targetEntity: CartArticle::class, cascade: ['remove'])]
     private Collection $cartArticles;
 
     #[ORM\Column]
-    private ?bool $submited = null;
+    private ?bool $submitted = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $created_at = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $updated_at = null;
+
+    #[ORM\ManyToOne(inversedBy: 'carts')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
 
     public function __construct()
     {
+        $this->created_at = new \DateTimeImmutable('now');
         $this->cartArticles = new ArrayCollection();
+        $this->submitted = false;
     }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
 
     /**
      * @return Collection<int, CartArticle>
@@ -58,14 +76,50 @@ class Cart
         return $this;
     }
 
-    public function isSubmited(): ?bool
+    public function isSubmitted(): ?bool
     {
-        return $this->submited;
+        return $this->submitted;
     }
 
-    public function setSubmited(bool $submited): static
+    public function setSubmitted(bool $submitted): static
     {
-        $this->submited = $submited;
+        $this->submitted = $submitted;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $created_at): static
+    {
+        $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updated_at;
+    }
+
+    public function setUpdatedAt(?\DateTimeImmutable $updated_at): static
+    {
+        $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

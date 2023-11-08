@@ -28,12 +28,24 @@ class ArticleViewEventSubscriber implements EventSubscriberInterface
         /** @var Article $article */
         /** @var User $user */
         [$article, $user] = $event->getArticleWithUser();
-        if ($user && $user->getRoles() === ['ROLE_USER']) {
+        /** @var ArticleView|null $articleView */
+        $articleView = $this->manager
+            ->getRepository(ArticleView::class)
+            ->findIfUserViewArticle($article->getId(),$user);
+        if($articleView === null)
+        {
             $articleView = new ArticleView();
-            $articleView->setViewBy($user);
-            $articleView->setArticle($article);
-            $this->manager->persist($articleView);
-            $this->manager->flush();
+        }else{
+            $articleView->setUpdatedAt(new \DateTimeImmutable());
         }
+        $articleView->setArticle($article);
+//        $articleView->
+        if ($user && $user->getRoles() === ['ROLE_USER']) {
+            $articleView->setViewBy($user);
+        }
+        $articleView->incrementViewNumber();
+        $this->manager->persist($articleView);
+
+        $this->manager->flush();
     }
 }

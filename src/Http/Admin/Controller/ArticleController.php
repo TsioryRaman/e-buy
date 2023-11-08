@@ -67,7 +67,7 @@ class ArticleController extends CrudController
             return $this->crudIndex($query,12,['q'=>$q]);
         }
         /** @var QueryBuilder $query */
-        $query = $this->getRepository()->findLatest();
+        $query = $this->getRepository()->findLatestCrud();
 
         return $this->crudIndex($query);
     }

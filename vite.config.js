@@ -42,5 +42,8 @@ export default defineConfig({
         'tailwind.css': './assets/css/tailwind.css'
       }
     }
+  },
+  optimizeDeps: {
+    exclude: ['slick-carousel']
   }
 })

@@ -2,13 +2,13 @@
 
 namespace App\Http\Controller\search;
 
+use App\Http\Controller\BaseController;
 use App\Infrastructure\Search\SearchInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class SearchController extends AbstractController
+class SearchController extends BaseController
 {
 
     /**

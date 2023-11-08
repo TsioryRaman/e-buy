@@ -2,13 +2,16 @@
 
 namespace App\Domain\Cart\service;
 
+use App\Domain\Article\Article;
 use App\Domain\Article\repository\ArticleRepository;
+use App\Domain\Auth\User;
 use App\Domain\Cart\ArticleMoreThanQuantityException;
 use App\Domain\Cart\Cart;
 use App\Domain\Cart\CartArticle;
 use App\Domain\Cart\CartData;
 use App\Infrastructure\Session\SessionService;
 use App\Repository\Domain\Cart\CartArticleRepository;
+use App\Repository\Domain\Cart\CartRepository;
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -19,11 +22,10 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 class CartService
 {
     public function __construct(
-        private readonly SessionService           $session,
-        private readonly ArticleRepository        $articleRepository,
-        private readonly EntityManagerInterface   $manager,
-        private readonly NormalizerInterface      $normalizer,
-        private readonly EventDispatcherInterface $dispatcher
+        private readonly SessionService         $session,
+        private readonly EntityManagerInterface $manager,
+        private readonly NormalizerInterface    $normalizer,
+        private readonly CartArticleService     $cartArticleService
     )
     {
     }
@@ -31,35 +33,46 @@ class CartService
     /**
      * @throws \Exception
      */
-    public function addArticle(CartData $cart): void
+    public function addArticle(CartData $cart, User $user): void
     {
         $this->manager->getConnection()->beginTransaction();
         $carts = $this->session->get('cart');
-        $article = $this->articleRepository->find($cart->getId());
+        $article = $this->manager->getRepository(Article::class)->find($cart->getId());
         if (!$article || $article->getQuantity() < $cart->getQuantity()) {
             throw new ArticleMoreThanQuantityException("L'article demandee ne possede pas autant de quantite", Response::HTTP_BAD_REQUEST);
         }
+        $this->cartArticleService
+            ->addArticleToCart(
+                $article, $cart,
+                $this->getQuantityIfExist($cart->getId()), $user
+            );
+
         if ((array_key_exists($cart->getId(), $carts) && $cart->getQuantity() === 0)) {
-            // supprimer dans le panier
             unset($carts[$cart->getId()]);
-//            $cartArticle = $this->articleRepository->find($cart->getId())->getCartArticles();
-//            $cartArticle->re
         } else if (!array_key_exists($cart->getId(), $carts)) {
-            $_cart = new Cart();
-            $cartArticle = new CartArticle();
-            $cartArticle->setArticle($this->articleRepository->find($cart->getId()));
-            $cartArticle->setQuantity($cart->getQuantity());
-            $cartArticle->setCart($_cart);
             $carts[$cart->getId()] = $cart->getQuantity();
         } else {
             $carts[$cart->getId()] = $cart->getQuantity();
         }
-        $this->manager->flush();
         $this->manager->getConnection()->commit();
-
         $this->session->add('cart', $carts);
     }
 
+    private function getQuantityIfExist(int $id)
+    {
+        $carts = $this->session->get('cart');
+
+        if (array_key_exists($id, $carts)) {
+            return $carts[$id];
+        }
+
+        return 0;
+    }
+
+    public function deleteCartFromSession(): void
+    {
+        $this->session->remove('cart');
+    }
 
     /**
      * @throws ArticleMoreThanQuantityException
@@ -69,7 +82,7 @@ class CartService
     {
         $this->manager->getConnection()->beginTransaction();
         $carts = $this->session->get('cart');
-        $article = $this->articleRepository->find($cart->getId());
+        $article = $this->manager->getRepository(Article::class)->find($cart->getId());
         if (!$article) {
             throw new ArticleMoreThanQuantityException("L'article demandee n'existe pas.", Response::HTTP_BAD_REQUEST);
         }
@@ -86,6 +99,15 @@ class CartService
         $this->session->add('cart', $carts ?? []);
     }
 
+    public function submitCartUser(User $user): void
+    {
+        /** @var Cart $cart */
+        $cart = $this->manager->getRepository(Cart::class)->findArticleNotPurchased($user->getId());
+        $cart->setSubmitted(true)
+            ->setUpdatedAt(new \DateTimeImmutable('now'));
+        $this->manager->flush();
+    }
+
     /**
      * @return array
      * @throws ExceptionInterface
@@ -96,7 +118,7 @@ class CartService
         $articles = [];
 //        $article = $this->articleRepository->findArticleWithId(array_keys($carts));
         foreach ($carts as $key => $quantity) {
-            $article = $this->articleRepository->find($key);
+            $article = $this->manager->getRepository(Article::class)->find($key);
             $articles[] = $this->normalizer->normalize([$article, $quantity], 'cart');
         }
 
@@ -105,7 +127,7 @@ class CartService
 
     public function getCurrentArticle(CartData $cart): array|null
     {
-        $article = $this->articleRepository->find($cart->getId());
+        $article = $this->manager->getRepository(Article::class)->find($cart->getId());
         if ($article) {
             $data = [$article, $cart->getQuantity()];
             return $this->normalizer->normalize($data, 'cart');

@@ -22,11 +22,11 @@
         <div class="flex w-full gap-3 space-between">
             {{ form_row(form.category) }}
             {{ form_row(form.fournisseur) }}
-            <ul class="files"
-                data-index="{{ form.attachment|length > 0 ? form.attachement|last.vars.name + 1 : 0 }}"
-                data-prototype="{{ form_widget(form.attachment.vars.prototype)|e('html_attr') }}"
-            ></ul>
-            <input type="file" multiple class="file-input">
+{#            <ul class="files"#}
+{#                data-index="{{ form.attachment|length > 0 ? form.attachement|last.vars.name + 1 : 0 }}"#}
+{#                data-prototype="{{ form_widget(form.attachment.vars.prototype)|e('html_attr') }}"#}
+{#            ></ul>#}
+{#            <input type="file" multiple class="file-input">#}
 
         </div>
         <div class="flex w-full gap-3 space-between">
@@ -43,6 +43,7 @@
                 
 
         </div>
+        {% include 'admin/article/_form.html.twig' %}
 
         {{ form_rest(form) }}
         <button class="px-4 mt-4 py-2 text-white rounded hover:bg-green-400 shadow-sm duration-300 bg-green-500">

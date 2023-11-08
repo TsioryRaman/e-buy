@@ -4,6 +4,7 @@ namespace App\Domain\Auth;
 
 use App\Domain\Article\Article;
 use App\Domain\Article\ArticleView;
+use App\Domain\Cart\Cart;
 use App\Domain\Commande\Entity\Commande;
 use App\Domain\Auth\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -51,16 +52,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private array $roles = [];
 
     #[ORM\OneToMany(mappedBy: 'view_by', targetEntity: ArticleView::class)]
-    private Collection $article_view;
+    private ?Collection $article_view = null;
 
     #[ORM\ManyToMany(targetEntity: Article::class, mappedBy: 'like_by')]
     private Collection $article_liked;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Cart::class, orphanRemoval: true)]
+    private Collection $carts;
+
     public function __construct()
     {
         $this->commandes = new ArrayCollection();
-        $this->article_view = new ArrayCollection();
         $this->article_liked = new ArrayCollection();
+        $this->article_view = new ArrayCollection();
+        $this->carts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -152,32 +157,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection<int, ArticleView>
      */
-    public function getArticleView(): Collection
-    {
-        return $this->article_view;
-    }
-
-    public function addArticleView(ArticleView $article): static
-    {
-        if (!$this->article_view->contains($article)) {
-            $this->article_view->add($article);
-            $article->setViewBy($this);
-        }
-
-        return $this;
-    }
-
-    public function removeArticleView(ArticleView $article_view): static
-    {
-        if ($this->article_view->removeElement($article_view)) {
-            // set the owning side to null (unless already changed)
-            if ($article_view->getViewBy() === $this) {
-                $article_view->setViewBy(null);
-            }
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Article>
@@ -205,4 +184,65 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Cart>
+     */
+    public function getCarts(): Collection
+    {
+        return $this->carts;
+    }
+
+    public function addCart(Cart $cart): static
+    {
+        if (!$this->carts->contains($cart)) {
+            $this->carts->add($cart);
+            $cart->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCart(Cart $cart): static
+    {
+        if ($this->carts->removeElement($cart)) {
+            // set the owning side to null (unless already changed)
+            if ($cart->getUser() === $this) {
+                $cart->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|null
+     */
+    public function getArticleView(): ?Collection
+    {
+        return $this->article_view;
+    }
+
+    public function addArticleView(ArticleView $article_view): static
+    {
+        if (!$this->article_view->contains($article_view)) {
+            $this->article_view->add($article_view);
+            $article_view->setViewBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArticleView(ArticleView $article_view): static
+    {
+        if ($this->article_view->removeElement($article_view)) {
+            // set the owning side to null (unless already changed)
+            if ($article_view->getArticle() === $this) {
+                $article_view->setArticle(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

@@ -16,11 +16,10 @@
         {% endblock %}
     </head>
     <body>
-        <div class="min-h-screen flex flex-col">
+        <div class="min-h-screen flex flex-col overflow-x-hidden">
 
         {% include "navbar.html.twig" %}
         {% block body %}{% endblock %}
-
         {% include "component/footer.html.twig" %}
         </div>
     </body>

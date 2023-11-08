@@ -10,8 +10,8 @@
                 <div class="grid font-medium grid-cols-5 cursor-default px-3 duration-150 py-4 text-xl text-left justify-between">
                     <h4>Nom</h4>
                     <h4>Prix unitaire</h4>
-                    <h4>Quantite</h4>
                     <h4>Prix total</h4>
+                    <h4>Quantite</h4>
                     <h4 class="text-center">Supprimer</h4>
                 </div>
                 {% for article in articles %}
@@ -19,7 +19,13 @@
                         <h4>{{ article.name }}</h4>
                         <h4>{{ article.price_unity }} $</h4>
                         <h4>{{ article.price }} $</h4>
-                        <article-commande {% if app.user %}data-user="{{ app.user.id }}"{% endif%} data-show="false" data-quantity="{{ article.quantity }}" data-default="{{ article.cart_quantity }}" data-article="{{ article.id }}"></article-commande>
+                        <article-commande
+                                {% if app.user %}data-user="{{ app.user.id }}"{% endif%}
+                                data-show="false"
+                                data-quantity="{{ article.quantity }}"
+                                data-default="{{ article.cart_quantity }}"
+                                data-article="{{ article.id }}"
+                        ></article-commande>
                         <form class="text-center" action="">
                             <button class="px-3 py-2 rounded shadow-sm hover:bg-red-500 duration-200 bg-red-400 text-white"><Icon-feather name="minus" size="16"></Icon-feather></button>
                         </form>
@@ -28,9 +34,7 @@
 
                 {% endfor %}
 
-                <form action="" class="">
-                    <button class="px-3 py-2 text-white mt-4 bg-green-400 shadow rounded">Acheter</button>
-                </form>
+                    <a href="{{ path('cart.pay') }}" class="px-3 py-2 text-white mt-4 bg-green-400 shadow rounded">Payer</a>
             </div>
         {% else %}
             <em class="text-2xl font-medium inline-block mt-12">

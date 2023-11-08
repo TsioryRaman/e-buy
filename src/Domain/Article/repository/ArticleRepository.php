@@ -57,13 +57,21 @@ class ArticleRepository extends ServiceEntityRepository
     public function findLatest():QueryBuilder
     {
         return $this->createQueryBuilder('a')
-                    ->select('a','at','COUNT(views.id) as view')
-                    ->leftJoin('a.articleViews','views',Join::WITH,'a.id = views.article')
+                    ->select('a')
+                    ->leftJoin('a.articleViews','view','a.id = view.id')
                     ->leftJoin('a.like_by','u')
+                    ->leftJoin('a.cartArticles','ca',Join::WITH,'a.id = ca.article')
+                    ->leftJoin('ca.cart','c',Join::WITH,'ca.cart = c.id AND c.submitted = 0')
                     ->leftJoin('a.attachment','at')
-                    ->groupBy('a.id')
-                    ->addOrderBy('view',"DESC")
                     ->addOrderBy('a.created_at',"DESC");
+    }
+
+    public function findLatestCrud():QueryBuilder
+    {
+        return $this->createQueryBuilder('a')
+            ->select('a')
+            ->leftJoin('a.attachment','at')
+            ->addOrderBy('a.created_at',"DESC");
     }
 
     public function findArticleWithId(array $array_id):array

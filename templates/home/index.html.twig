@@ -4,77 +4,100 @@
 {% endblock %}
 
 {% block body %}
-	{% include "component/header.html.twig" %}
-	<div class="container mt-16"></h2>
-	<div class="xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 grid gap-y-28 md:gap-x-4 lg:gap-x-12">
-		<div class="flex col-span-2">
-			<div class="mr-6">
-				<h1 class="text-3xl text-gray-500 font-extrabold tracking-widest">Divers nouveautes dans nos locaux,
-					                    venez vite nous visiter!</h1>
-				<p class="mt-8 text-lg text-gray-600 font-medium text-justify tracking-normal md:line-clamp-6 line-clamp-5">
-					Lorem ipsum dolor sit amet consectetur, adipisicing elit. Unde nisi enim totam autem at odit ab
-					                    praesentium corporis ducimus doloremque necessitatibus sit, earum ullam eum porro delectus nobis,
-					                    eligendi accusamus!
-					                    Exercitationem nam quis eveniet error explicabo ducimus vitae autem, modi adipisci illo, voluptas
-					                    hic assumenda ad rem quae ut, sit a ipsa pariatur aperiam amet architecto.
-					                    Repellat beatae aperiam provident aliquid blanditiis velit, officiis praesentium natus itaque
-					                    veritatis, consectetur impedit alias sequi dolorem, ipsum aspernatur! Aliquam libero nesciunt beatae
-					                    modi veritatis est ullam dolores molestias doloribus! Lorem ipsum dolor sit amet consectetur,
-					                    adipisicing elit. Laudantium itaque molestias ipsum natus est totam quas cum sint optio modi
-					                    inventore ratione sed rem, facere, voluptatem eos eligendi libero quasi!</p>
-			</div>
-		</div>
-		{% for article in articles %}
-			<a href="{{ path('article.show', {id:article[0].id}) }}" class="flex group flex-col px-4 hover:bg-green-100 duration-100 text-gray-600 border-green-50 border pb-8 rounded-sm shadow-green-100 shadow-lg my-2">
-				<div class="relative -translate-y-12 group-hover:-translate-y-2/4 duration-300 w-auto h-auto">
-					{% if app.user %}
-						<div
-							class="absolute top-2 right-3 text-pink-500 z-10">
-							<like-article data-article="{{ article[0].id }}" data-liked="{% for liked_by in article[0].likeBy %} {% if liked_by.id == app.user.id %} true {% endif %} {% endfor %} "></like-article>
-						</div>
-					{% endif %}
-					{% if article[0].attachment[0]|default(null) %}
-						<img src="{{ vich_uploader_asset(article[0].attachment[0],'imageFile') | imagine_filter('my_thumb') }}" class="h-56 border border-gray-50 shadow-md bg-center shadow-green-200 bg-white" width="100%" height="150px" alt="">
-					{% else %}
-						<img src="{{ "/images/articles/default.jpg" | imagine_filter('my_thumb') }}" width="100%" class="h-56  rounded shadow-md shadow-green-200 bg-center" alt="">
-					{% endif %}
-				</div>
-				<div class="group-hover:-translate-y-4 duration-300">
-					<h2 class="md:text-2xl text-xl font-medium truncate">{{ article[0].name }}</h2>
-					<p class="line-clamp-3 mt-8 text-md">{{ article[0].description }}</p>
-					<h3 class="mt-8 flex justify-between">
-						<span>Prices:</span>
-						<strong class="text-2xl">{{ article[0].price }}$</strong>
-					</h3>
-				</div>
-				<article-commande
-						{% if app.user %}
-							data-user="{{ app.user.id }}"
-						{% endif%}
-						data-quantity="{{ article[0].quantity }}"
-						data-article="{{ article[0].id }}"
-				></article-commande>
-				<div class="text-xs mt-4 text-gray-400 flex items-center justify-between flex-row gap-1">
-					<div class="flex flex-col items-start gap-1">
+    {% for message in app.flashes('success') %}
+        <div id="notification-flash"
+             class="px-4 fixed left-1/2 bottom-4 bg-white -translate-x-1/2 z-10 flex flex-row py-3 border min-w-md my-4 border-l-4 border-l-green-500 border-gray-100 rounded-sm shadow-sm mx-auto text-green-400">
+            <span class="text-white w-6 h-6 rounded-full bg-green-400 flex items-center justify-center mr-4"><Icon-feather
+                        name="check" size="20"></Icon-feather></span>{{ message }}
+        </div>
+    {% endfor %}
+    {% for message in app.flashes('error') %}
+
+        <div id="notification-flash"
+             class="px-4 absolute left-1/2 -translate-x-1/2 bg-white flex flex-row py-3 border min-w-md my-4 border-l-4 border-l-red-500 border-gray-100 rounded-sm shadow-sm mx-auto text-red-400">
+            <span class="text-white w-6 h-6 rounded-full bg-red-400 flex items-center justify-center mr-4"><Icon-feather
+                        name="x" size="20"></Icon-feather></span>{{ message }}
+        </div>
+    {% endfor %}
+
+    {% include "component/header.html.twig" %}
+    <div class="container mt-16"></h2>
+    <div class="xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 grid gap-y-28 md:gap-x-4 lg:gap-x-12">
+        <div class="flex col-span-2">
+            <div class="mr-6">
+                <h1 class="text-3xl text-gray-500 font-extrabold tracking-widest">Divers nouveautes dans nos locaux,
+                    venez vite nous visiter!</h1>
+                <p class="mt-8 text-lg text-gray-600 font-medium text-justify tracking-normal md:line-clamp-6 line-clamp-5">
+                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Unde nisi enim totam autem at odit ab
+                    praesentium corporis ducimus doloremque necessitatibus sit, earum ullam eum porro delectus nobis,
+                    eligendi accusamus!
+                    Exercitationem nam quis eveniet error explicabo ducimus vitae autem, modi adipisci illo, voluptas
+                    hic assumenda ad rem quae ut, sit a ipsa pariatur aperiam amet architecto.
+                    Repellat beatae aperiam provident aliquid blanditiis velit, officiis praesentium natus itaque
+                    veritatis, consectetur impedit alias sequi dolorem, ipsum aspernatur! Aliquam libero nesciunt beatae
+                    modi veritatis est ullam dolores molestias doloribus! Lorem ipsum dolor sit amet consectetur,
+                    adipisicing elit. Laudantium itaque molestias ipsum natus est totam quas cum sint optio modi
+                    inventore ratione sed rem, facere, voluptatem eos eligendi libero quasi!</p>
+            </div>
+        </div>
+        {% for article in articles %}
+            <a href="{{ path('article.show', {id:article.id, slug:article.slug}) }}"
+               class="flex group flex-col px-4 hover:bg-green-100 duration-100 text-gray-600 border-green-50 border pb-8 rounded-sm shadow-green-100 shadow-lg my-2">
+                <div class="relative -translate-y-12 group-hover:-translate-y-2/4 duration-300 w-auto h-auto">
+                    {% if app.user %}
+                        <div
+                                class="absolute top-2 right-3 text-pink-500 z-10">
+                            <like-article data-article="{{ article.id }}"
+                                          data-liked="{% for liked_by in article.likeBy %} {% if liked_by.id == app.user.id %} true {% endif %} {% endfor %} "></like-article>
+                        </div>
+                    {% endif %}
+                    {% if article.attachment[0]|default(null) %}
+                        <img src="{{ vich_uploader_asset(article.attachment[0],'imageFile') | imagine_filter('my_thumb') }}"
+                             class="h-56 border border-gray-50 shadow-md bg-center shadow-green-200 bg-white"
+                             width="100%" height="150px" alt="">
+                    {% else %}
+                        <img src="{{ "/images/articles/default.jpg" | imagine_filter('my_thumb') }}" width="100%"
+                             class="h-56  rounded shadow-md shadow-green-200 bg-center" alt="">
+                    {% endif %}
+                </div>
+                <div class="group-hover:-translate-y-4 duration-300">
+                    <h2 class="md:text-2xl text-xl font-medium truncate">{{ article.name }}</h2>
+                    <p class="line-clamp-3 mt-8 text-md">{{ article.description }}</p>
+                    <h3 class="mt-8 flex justify-between">
+                        <span>Prices:</span>
+                        <strong class="text-2xl">{{ article.price }}$</strong>
+                    </h3>
+                </div>
+                <article-commande
+                        {% if app.user %}
+                            data-user="{{ app.user.id }}"
+                        {% endif %}
+                        data-quantity="{{ article.quantity }}"
+{#                        data-default="{{ article['default_quantity'] }}"#}
+                        data-article="{{ article.id }}"
+                ></article-commande>
+                <div class="text-xs mt-4 text-gray-400 flex items-center justify-between flex-row gap-1">
+                    <div class="flex flex-col items-start gap-1">
 						<span class="flex-row flex items-center justify-center gap-1">
 							<Icon-feather name="eye" size="12"></Icon-feather>views
-							{{ article.view }}
-						</span>
-						<span class="flex-row flex items-center justify-center gap-1">
-							<Icon-feather name="heart" class="heart__icon_liked" size="12"></Icon-feather>liked
-							{{ article[0].liked }}
+                                {{ article.articleViewCount }}
 
 						</span>
-					</div>
-					<span class="flex-row flex items-center justify-center gap-1">
+                        <span class="flex-row flex items-center justify-center gap-1">
+							<Icon-feather name="heart" class="heart__icon_liked" size="12"></Icon-feather>liked
+							{{ article.liked }}
+
+						</span>
+                    </div>
+                    <span class="flex-row flex items-center justify-center gap-1">
 						<Icon-feather name="clock" size="12"></Icon-feather>
-						{{ article[0].updatedAt|date("m/d/y") }}
+						{{ article.updatedAt|date("m/d/y") }}
 					</span>
-				</div>
-			</a>
-		{% endfor %}
-	</div>
-	<div class="flex mt-8">
-		{{ knp_pagination_render(articles) }}
-	</div>
-</div>{% endblock %}
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+    <div class="flex mt-8">
+        {{ knp_pagination_render(articles) }}
+    </div>
+    </div>{% endblock %}

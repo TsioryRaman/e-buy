@@ -1,5 +1,6 @@
 @import "./form/_form.css";
 @import "../icons/icons.css";
+@import "animation.css";
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Luckiest+Guy&family=Roboto+Mono:ital,wght@0,400;1,600&display=swap');
 
 :root {
@@ -41,4 +42,12 @@
 
 .font__luckiest {
     font-family: 'Luckiest Guy', 'sans-serif','system-ui', cursive;
+}
+
+.turbolinks-progress-bar {
+  height: 5px;
+  background-color: theme('colors.green.400');
+  position: fixed;
+  width: 100%;
+  z-index: 100;
 }

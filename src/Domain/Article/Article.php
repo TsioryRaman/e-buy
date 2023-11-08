@@ -74,7 +74,7 @@ class Article
     private Collection $attachment;
 
     #[ORM\OneToMany(mappedBy: 'article', targetEntity: ArticleView::class)]
-    private Collection $articleViews;
+    private Collection|null $articleViews = null;
 
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'article_liked')]
     #[ORM\JoinTable(name: 'article_like')]
@@ -82,6 +82,9 @@ class Article
 
     #[ORM\OneToMany(mappedBy: 'article', targetEntity: CartArticle::class)]
     private Collection $cartArticles;
+
+    #[ORM\Column(length: 255)]
+    private ?string $slug = null;
 
     public function __construct()
     {
@@ -279,6 +282,8 @@ class Article
         return $this;
     }
 
+
+
     /**
      * @return Collection<int, Attachment>
      */
@@ -303,36 +308,6 @@ class Article
             // set the owning side to null (unless already changed)
             if ($attachment->getArticle() === $this) {
                 $attachment->setArticle(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, ArticleView>
-     */
-    public function getArticleViews(): Collection
-    {
-        return $this->articleViews;
-    }
-
-    public function addArticleView(ArticleView $articleView): static
-    {
-        if (!$this->articleViews->contains($articleView)) {
-            $this->articleViews->add($articleView);
-            $articleView->setArticle($this);
-        }
-
-        return $this;
-    }
-
-    public function removeArticleView(ArticleView $articleView): static
-    {
-        if ($this->articleViews->removeElement($articleView)) {
-            // set the owning side to null (unless already changed)
-            if ($articleView->getArticle() === $this) {
-                $articleView->setArticle(null);
             }
         }
 
@@ -397,4 +372,59 @@ class Article
 
         return $this;
     }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
+     * @return ArticleView|null
+     */
+    public function getArticleViews(): ?Collection
+    {
+        return $this->articleViews;
+    }
+
+    public function addArticleViews(ArticleView $articleView): static
+    {
+        if (!$this->articleViews->contains($articleView)) {
+            $this->articleViews->add($articleView);
+            $articleView->setArticle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArticleViews(ArticleView $articleView): static
+    {
+        if ($this->articleViews->removeElement($articleView)) {
+            // set the owning side to null (unless already changed)
+            if ($articleView->getArticle() === $this) {
+                $articleView->setArticle(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getArticleViewCount()
+    {
+        $s = 0;
+        /** @var ArticleView $articleView */
+        foreach ($this->articleViews as $articleView)
+        {
+            $s += $articleView->getViewNumber();
+        }
+
+        return $s;
+    }
+
 }
