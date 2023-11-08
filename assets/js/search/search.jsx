@@ -33,11 +33,11 @@ const Search = ({ action }) => {
     <React.Fragment>
     <div>
       <form
-        className="flex flex-row items-center justify-center md:visible cursor-pointer  duration-300 md:bg-gray-100 rounded-full overflow-hidden md:hover:text-white md:hover:bg-gray-200"
+        className="flex flex-row items-center justify-center md:visible cursor-pointer  duration-300 md:bg-gray-100 rounded-full overflow-hidden md:hover:text-white md:hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700"
         action={action}
       >
         <label
-          className=" h-full bottom-0 md:flex items-center pl-4 hidden dark:text-gray-700 my-0 mx-0 pr-4"
+          className=" h-full bottom-0 md:flex items-center pl-4 hidden my-0 mx-0 pr-4"
           htmlFor="search"
         >
           <icon-feather name="search" size="24" />
@@ -48,7 +48,7 @@ const Search = ({ action }) => {
           onChange={handleChange}
           placeholder="Rechercher un article..."
           onClick={() => setOpen(true)}
-          className="text-sm hidden md:flex focus:w-96 duration:300 bg-inherit w-auto px-8 py-0 mx-0 shadow-none border-none hover:placeholder-gray-400 focus:placeholder-transparent placeholder-gray-700 text-gray-700"
+          className="text-sm hidden md:flex focus:w-96 duration:300 bg-transparent w-auto px-8 py-0 mx-0 shadow-none border-none hover:placeholder-gray-400 focus:placeholder-transparent placeholder-gray-700 dark:text-white text-gray-700"
           name="q"
           id="search"
         />

@@ -6,7 +6,7 @@
 {% block body %}
 	<h1 class="text-3xl font-medium mb-12 mt-8 text-center">S'inscrire</h1>
 
-	<div class="border md:px-6 md:max-w-sm px-8 pb-12 pt-6 mt-12 max-w-md mx-auto relative border-gray-100 text-gray-600 rounded">
+	<div class="border md:px-6 md:max-w-sm px-8 dark:bg-slate-800 bg-white dark:text-gray-50 pb-12 pt-6 mt-12 max-w-md mx-auto relative border-gray-100 dark:border-slate-700 text-gray-600 rounded">
 		{{form_start(form)}}
 		{{form_row(form.email)}}
 		{{form_row(form.password)}}
@@ -14,6 +14,6 @@
 		<button class="px-4 py-2 rounded-sm shadow bg-green-500 self-start text-white hover:bg-green-400 duration-300">S'inscrire</button>
 		{{form_end(form)}}
 		<p class="text-sm mt-8">Vos données personnelles (email et nom d'utilisateur) ne sont utilisées qu'à des fins d'authentification et ne sont pas partagées avec des tiers (En savoir plus).</p>
-		<a href="{{path('app_login')}}" class="absolute bottom-4 text-gray-900">Se connecter</a>
+		<a href="{{path('app_login')}}" class="absolute bottom-4 dark:text-gray-50 dark:font-medium text-gray-900">Se connecter</a>
 	</div>
 {% endblock %}

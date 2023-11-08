@@ -417,14 +417,14 @@ class Article
 
     public function getArticleViewCount()
     {
-        $s = 0;
+        $sum = 0;
         /** @var ArticleView $articleView */
         foreach ($this->articleViews as $articleView)
         {
-            $s += $articleView->getViewNumber();
+            $sum += $articleView->getViewNumber();
         }
 
-        return $s;
+        return $sum;
     }
 
 }

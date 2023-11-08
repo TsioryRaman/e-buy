@@ -25,8 +25,10 @@ class ArticleViewRepository extends ServiceEntityRepository
     public function findIfUserViewArticle(int $articleId,?User $user): ArticleView|null
     {
         $query =  $this->createQueryBuilder('av')
-            ->select('av')
+            ->select('av','a')
             ->where('av.article = :articleId')
+            ->leftJoin('av.article','a')
+//            ->leftJoin('av.view_by','u')
             ->setParameter('articleId',$articleId);
         if($user !== null)
         {

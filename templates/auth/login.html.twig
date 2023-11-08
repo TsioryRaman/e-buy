@@ -2,9 +2,9 @@
 {% block title "Se connecter" %}
 
 {% block body %}
-		<h1 class="text-3xl font-medium mb-12 mt-12 text-center">Se connecter</h1>
+		<h1 class="text-3xl font-medium mt-12 text-center">Se connecter</h1>
 
-	<div class="border md:px-6 md:max-w-sm px-4 pb-12 pt-6 mt-12 max-w-md mx-auto relative border-gray-100 text-gray-600 rounded">
+	<div class="border md:px-6 md:max-w-sm px-4 pb-12 pt-6 mt-12 max-w-md mx-auto relative border-gray-100 dark:border-slate-700 dark:text-gray-100 dark:bg-slate-800 mb-12 text-gray-600 rounded">
 
 		<form action="{{ path('app_login') }}" method="POST">
 			<div class="form-group">
@@ -24,9 +24,9 @@
 				<label class=" cursor-pointer mb-0" for="remember_me">Se souvenir de moi</label>
 			</div>
 			<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-			<button type="submit" class="px-4 py-2 rounded-sm shadow self-start bg-green-500 text-white hover:bg-green-400 duration-300">Se connecter</button>
+			<button type="submit" class="px-4 py-2 rounded-sm dark:bg-green-900 shadow self-start bg-green-500 text-white hover:bg-green-400 duration-300">Se connecter</button>
 		</form>
 
-			<a href="{{path('user.register')}}" class="text-gray-800 mt-4 inline-block">S'inscrire</a>
+			<a href="{{path('user.register')}}" class="text-gray-800 dark:text-gray-100  mt-4 inline-block">S'inscrire</a>
 	</div>
 {% endblock %}

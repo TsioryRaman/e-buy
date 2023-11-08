@@ -57,12 +57,13 @@ class ArticleRepository extends ServiceEntityRepository
     public function findLatest():QueryBuilder
     {
         return $this->createQueryBuilder('a')
-                    ->select('a')
-                    ->leftJoin('a.articleViews','view','a.id = view.id')
+                    ->select('a','view','u','at','ca')
+                    ->leftJoin('a.articleViews','view')
                     ->leftJoin('a.like_by','u')
-                    ->leftJoin('a.cartArticles','ca',Join::WITH,'a.id = ca.article')
+                    ->leftJoin('a.cartArticles','ca',Join::WITH)
                     ->leftJoin('ca.cart','c',Join::WITH,'ca.cart = c.id AND c.submitted = 0')
                     ->leftJoin('a.attachment','at')
+//                    ->groupBy('a.id')
                     ->addOrderBy('a.created_at',"DESC");
     }
 

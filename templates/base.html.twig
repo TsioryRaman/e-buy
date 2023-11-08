@@ -14,10 +14,11 @@
         {% endblock %}
     </head>
     <body>
-        <div class="min-h-screen flex flex-col overflow-x-hidden bg-green-50 dark:bg-slate-900">
+        <div class="min-h-screen flex flex-col dark:text-white overflow-x-hidden dark:bg-slate-900">
 
         {% include "navbar.html.twig" %}
         {% block body %}{% endblock %}
+            <div class="mt-12"></div>
         {% include "component/footer.html.twig" %}
         </div>
     </body>
