@@ -1,6 +1,5 @@
 # e-buy
-
-## Application e-commerce build avec Symfony et React.Js avec l'envirenoment Docker (Docker is the best :P)
+Application e-commerce build avec Symfony et React.Js avec l'envirenoment Docker (Docker is the best :P)
 
 ## Prérequis
 Afin de pouvoir exécuter l'application sur votre poste, vous devez d'aborder installer les dépendances suivantes :
