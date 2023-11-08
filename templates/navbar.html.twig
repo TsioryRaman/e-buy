@@ -1,4 +1,4 @@
-<div class="py-4 text-gray-600 border bg-white border-b-green-50">
+<div class="py-4 text-gray-600 border bg-white dark:border-transparent dark:bg-slate-900 dark:text-white border-b-green-50">
     <div class="container">
         <div class="flex justify-between">
             <a href="{{ path("home.index") }}"
@@ -44,6 +44,7 @@
                             <icon-feather name="logout" size="15"/>
                         </a>
                     {% endif %}
+                    <button-theme {% if app.user %}data-default-theme="{{ app.user.theme }}"{% endif %}></button-theme>
                 </ul>
             </div>
             <div class="max-md:flex flex-row items-center  gap-2 hidden">

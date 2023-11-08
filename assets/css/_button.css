@@ -1,0 +1,59 @@
+.button_theme {
+    display: flex;
+    justify-items: center;
+    align-items: center;
+    height: 30px;
+    width: 65px;
+    border-radius:30px;
+    background-color: theme('colors.green.500');
+    position: relative;
+    cursor: pointer;
+}
+
+label {
+    margin: 0;
+}
+
+.button_theme::before{
+    content: '';
+    cursor: pointer;
+    position: absolute;
+    background-color: white;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    top: 2.5px;
+    left: 4px;
+    box-shadow: 2px 2px 3px rgba(0, 128, 0, 0.41);
+    transform: translateX(0px);
+    transition-duration: .6s;
+}
+input:checked ~ .button_theme::before{
+    transform: translateX(5px);
+    transition-duration: .6s;
+}
+input:checked ~ .button_theme{
+    background-color: theme('colors.slate.800') !important;
+}
+.sun__icon {
+    position: absolute;
+    display: none;
+    transform: translateY(-50%);
+    top: 15.5px;
+    cursor: pointer;
+    color: theme('colors.yellow.400') !important;
+    left: calc(9px);
+}
+input:checked ~ .moon__icon,
+input:not(:checked) ~ .sun__icon {
+    display: flex;
+}
+.moon__icon {
+    position: absolute;
+    display: none;
+    transform: translateY(-50%);
+    color: theme('colors.slate.800') !important;
+    cursor: pointer;
+    top: 15.5px;
+    left: 44px;
+}

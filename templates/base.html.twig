@@ -6,9 +6,7 @@
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
         {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
         {% block stylesheets %}
-
         {% endblock %}
-
         {% block javascripts %}
             {{ vite_asset("main.js") }}
             {{ vite_asset("tailwind.js") }}
@@ -16,7 +14,7 @@
         {% endblock %}
     </head>
     <body>
-        <div class="min-h-screen flex flex-col overflow-x-hidden">
+        <div class="min-h-screen flex flex-col overflow-x-hidden bg-green-50 dark:bg-slate-900">
 
         {% include "navbar.html.twig" %}
         {% block body %}{% endblock %}

@@ -60,6 +60,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Cart::class, orphanRemoval: true)]
     private Collection $carts;
 
+    #[ORM\Column(length: 255)]
+    private ?string $theme = 'light';
+
     public function __construct()
     {
         $this->commandes = new ArrayCollection();
@@ -241,6 +244,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $article_view->setArticle(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTheme(): ?string
+    {
+        return $this->theme;
+    }
+
+    public function setTheme(string $theme): static
+    {
+        $this->theme = $theme;
 
         return $this;
     }

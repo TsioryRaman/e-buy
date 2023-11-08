@@ -3,7 +3,7 @@
 {% block title 'E-Buy | Panier' %}
 
 {% block body %}
-    <div class="container mb-12">
+    <div class="container dark:text-white text-gray-700 mb-12">
         <h1 class="text-4xl font-bold mt-8">Liste de panier</h1>
         {% if articles %}
             <div class="mt-8">
@@ -15,7 +15,7 @@
                     <h4 class="text-center">Supprimer</h4>
                 </div>
                 {% for article in articles %}
-                    <div class="grid grid-cols-5 hover:bg-gray-300 px-3 duration-150 cursor-pointer py-4 text-left justify-between">
+                    <div class="grid grid-cols-5 hover:bg-gray-300 dark:hover:bg-slate-800 px-3 duration-150 cursor-pointer py-4 text-left justify-between">
                         <h4>{{ article.name }}</h4>
                         <h4>{{ article.price_unity }} $</h4>
                         <h4>{{ article.price }} $</h4>

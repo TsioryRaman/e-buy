@@ -3,16 +3,16 @@
 {% block title 'Gestion des articles' %}
 
 {% block header %}
-    <h1 class="text-2xl py-6 mt-4 mb-8 flex flex-row items-center gap-2 text-gray-400 cursor-default">
+    <h1 class="text-2xl py-6 mt-4 mb-8  flex flex-row items-center gap-2 text-gray-400 cursor-default">
         <Icon-feather name="list" class="text-blue-500" size="24"></Icon-feather>
         Liste des articles
     </h1>
 {% endblock %}
 
 {% block body %}
-    <div class="flex flex-row justify-between">
+    <div class="flex dark:bg-slate-900 dark:text-white flex-row justify-between">
         <form action="{{ path('admin.article.index') }}" method="GET" class="relative cursor-pointer items-center flex flex-row justify-center ">
-            <input type="text" class="px-8" name="q" value="{% if q|default(null) %}{{ q }}{% endif %}" id="search_article" placeholder="Rechercher">
+            <input type="text" class="px-8 dark:bg-slate-800 dark:border-slate-950" name="q" value="{% if q|default(null) %}{{ q }}{% endif %}" id="search_article" placeholder="Rechercher">
             <button type="submit" class="absolute right-4">
                 <label class="text-gray-200 top-50">
                     <Icon-feather name="search"></Icon-feather>
@@ -36,7 +36,7 @@
             </thead>
             <tbody>
             {% for row in rows %}
-                <tr class="even:bg-white group odd:bg-green-100 text-left py-8 px-2 text-gray-700 hover:bg-green-300 cursor-pointer hover:text-white duration-150 border-b-green-50 border-b">
+                <tr class="even:bg-white dark:even:bg-slate-800 group odd:bg-green-100 dark:odd:bg-slate-700 dark:hover:bg-slate-900 dark:bg-slate-900 dark:text-white text-left py-8 px-2 text-gray-700 hover:bg-green-300 cursor-pointer hover:text-white duration-150 border-b-green-50 dark:border-b-slate-950 border-b">
                     <td class="py-6 w-1/6">
                         <h2 class="text-md font-medium ml-4">{{ row.id }}</h2>
                     </td>

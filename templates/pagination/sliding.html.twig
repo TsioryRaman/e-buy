@@ -3,25 +3,25 @@
 {% if pageCount > 1 %}
     <div class="flex rounded mx-auto mb-8">
         {% if first is defined and current != first %}
-            <span class="last bg-green-400 rounded shadow shadow-green-300 hover:bg-green-500 duration-200 hover:text-white flex items-center justify-center px-2 text-gray-100 text-sm mr-3">
+            <span class="last bg-green-400 dark:bg-slate-800 rounded shadow shadow-green-300 dark:shadow-slate-600 dark:hover:bg-slate-900 hover:bg-green-500 duration-200 hover:text-white flex items-center justify-center px-2 text-gray-100 text-sm mr-3">
                 <a href="{{ path(route, query|merge({(pageParameterName): first})) }}"><<</a>
             </span>
         {% endif %}
         <div class="flex flex-row gap-2">
         {% for page in pagesInRange %}
             {% if page != current %}
-                <span class="page bg-green-400 rounded shadow shadow-green-300 hover:bg-green-500 duration-200 hover:text-white">
+                <span class="page bg-green-400 dark:bg-slate-800  rounded shadow shadow-green-300 dark:shadow-slate-600 dark:hover:bg-slate-900 hover:bg-green-500 duration-200 hover:text-white">
                     <a class="flex items-center justify-center px-3 h-full text-center text-gray-100 text-sm" href="{{ path(route, query|merge({(pageParameterName): page})) }}">{{ page }}</a>
                 </span>
             {% else %}
-                <span class="current px-3 py-1 hover:text-white cursor-pointer rounded hover:bg-green-500 text-gray-600 text-md">{{ page }}</span>
+                <span class="current px-3 py-1 hover:text-white cursor-pointer rounded hover:bg-green-500 dark:bg-slate-800 text-gray-600 text-md">{{ page }}</span>
             {% endif %}
         {% endfor %}
         </div>
 
 
         {% if last is defined and current != last %}
-            <span class="last bg-green-400 rounded shadow shadow-green-300 hover:bg-green-500 duration-200 hover:text-white flex items-center justify-center px-2 text-gray-100 text-sm ml-3">
+            <span class="last bg-green-400 dark:bg-slate-800 rounded shadow shadow-green-300 dark:shadow-slate-600 dark:hover:bg-slate-900 hover:bg-green-500 duration-200 hover:text-white flex items-center justify-center px-2 text-gray-100 text-sm ml-3">
                 <a href="{{ path(route, query|merge({(pageParameterName): last})) }}">&gt;&gt;</a>
             </span>
         {% endif %}

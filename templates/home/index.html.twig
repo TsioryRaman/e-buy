@@ -22,12 +22,12 @@
 
     {% include "component/header.html.twig" %}
     <div class="container mt-16"></h2>
-    <div class="xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 grid gap-y-28 md:gap-x-4 lg:gap-x-12">
+    <div class="xl:grid-cols-4 dark:text-gray-50 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 grid gap-y-28 md:gap-x-4 lg:gap-x-12">
         <div class="flex col-span-2">
             <div class="mr-6">
-                <h1 class="text-3xl text-gray-500 font-extrabold tracking-widest">Divers nouveautes dans nos locaux,
+                <h1 class="text-3xl text-gray-500 dark:text-gray-50 font-extrabold tracking-widest">Divers nouveautes dans nos locaux,
                     venez vite nous visiter!</h1>
-                <p class="mt-8 text-lg text-gray-600 font-medium text-justify tracking-normal md:line-clamp-6 line-clamp-5">
+                <p class="mt-8 text-lg text-gray-600 dark:text-gray-50 font-medium text-justify tracking-normal md:line-clamp-6 line-clamp-5">
                     Lorem ipsum dolor sit amet consectetur, adipisicing elit. Unde nisi enim totam autem at odit ab
                     praesentium corporis ducimus doloremque necessitatibus sit, earum ullam eum porro delectus nobis,
                     eligendi accusamus!
@@ -42,7 +42,7 @@
         </div>
         {% for article in articles %}
             <a href="{{ path('article.show', {id:article.id, slug:article.slug}) }}"
-               class="flex group flex-col px-4 hover:bg-green-100 duration-100 text-gray-600 border-green-50 border pb-8 rounded-sm shadow-green-100 shadow-lg my-2">
+               class="flex group flex-col px-4 hover:bg-green-100 dark:hover:bg-slate-800 duration-100 dark:text-gray-50 text-gray-600 border-green-50 border dark:border-transparent pb-8 rounded-sm shadow-green-100 dark:shadow-slate-800  shadow-lg my-2">
                 <div class="relative -translate-y-12 group-hover:-translate-y-2/4 duration-300 w-auto h-auto">
                     {% if app.user %}
                         <div
@@ -53,7 +53,7 @@
                     {% endif %}
                     {% if article.attachment[0]|default(null) %}
                         <img src="{{ vich_uploader_asset(article.attachment[0],'imageFile') | imagine_filter('my_thumb') }}"
-                             class="h-56 border border-gray-50 shadow-md bg-center shadow-green-200 bg-white"
+                             class="h-56 border border-gray-50 shadow-md bg-center shadow-green-200 bg-white dark:shadow-slate-800"
                              width="100%" height="150px" alt="">
                     {% else %}
                         <img src="{{ "/images/articles/default.jpg" | imagine_filter('my_thumb') }}" width="100%"

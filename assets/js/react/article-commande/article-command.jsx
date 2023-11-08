@@ -70,14 +70,14 @@ const ArticleCartComponent = ({quantity: _quantity, article, defaultQuantity, us
                     <div className="flex items-center justify-center">
                         <input style={{minHeight: "35px"}} onClick={e => e.stopPropagation()} type="text"
                                value={state > quantity ? quantity : state} onChange={handleChange}
-                               className="w-10 py-0 min-h-8 px-2"/>
+                               className="w-10 py-0 min-h-8 px-2 dark:text-black"/>
                     </div>
                     <ArticleIcon onClick={increment}>
                         <Icon name="plus" size="18" className="text-2xl"></Icon>
                     </ArticleIcon>
                 </div>
                 <button onClick={onSubmit}
-                        className="bg-green-400 hover:bg-green-500 duration-150 p-2 rounded shadow text-white"><Icon
+                        className="bg-green-400 hover:bg-green-500 dark:bg-green-600 duration-150 p-2 rounded shadow text-white"><Icon
                     size="22" name="cart"/></button>
 
             </div>}
@@ -92,7 +92,7 @@ const ArticleIcon = ({onClick, children}) => {
     }
 
     return <div onClick={handleClick}
-                className="px-2 py-1 flex items-center justify-center text-white bg-green-400 cursor-pointer hover:bg-green-500 duration-150 rounded shadow">
+                className="px-2 py-1 flex items-center dark:bg-green-600 justify-center text-white bg-green-400 cursor-pointer hover:bg-green-500 duration-150 rounded shadow">
         {children}
     </div>
 }

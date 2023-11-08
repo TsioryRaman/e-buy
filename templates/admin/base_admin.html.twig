@@ -29,7 +29,7 @@
                         name="x" size="20"></Icon-feather></span>{{ message }}
     </div>
 {% endfor %}
-    <div class="min-h-screen flex flex-col">
+    <div class="min-h-screen dark:bg-slate-900 dark:text-white flex flex-col">
         <div class="grid lg:grid-cols-[20%_80%] grid-cols-[0%_100%]">
             <div class="md:pb-8 shadow-md overflow-x-hidden relative w-full">
                 <div class="ml-8 w-64 fixed overflow-x-hidden max-h-screen overflow-hidden min-h-screen max-h-screen">
@@ -74,8 +74,9 @@
             </div>
 
             <div class="flex flex-col h-full">
-                <header class="w-full py-8 border border-b-gray-100 px-12">
+                <header class="w-full py-8 dark:border-transparent border border-b-gray-100 px-12">
                     <div class="w-full items-center flex flex-row justify-end gap-4">
+                        <button-theme></button-theme>
                         <div class="hover:text-gray-200 text-gray-400 duration-200">
                             <a href="{{ path("app_logout") }}"><Icon-feather name="bell" size="18"></Icon-feather></a>
                         </div>
@@ -84,12 +85,12 @@
                         </div>
                     </div>
                 </header>
-                <div class="bg-gray-50 self-stretch h-full">
-                    <div class="mx-12  my-6 flex md:col-start-2 flex-col">
+                <div class="bg-gray-50 self-stretch dark:bg-slate-800 dark:text-white h-full">
+                    <div class="mx-12 dark:bg-slate-800 dark:text-white  my-6 flex md:col-start-2 flex-col">
                         {% block header %}
                             <h1 class="text-2xl py-6 uppercase mt-4 mb-8">E-buy</h1>
                         {% endblock %}
-                        <div class="bg-white container rounded border shadow py-8 px-6">
+                        <div class="bg-white container rounded border dark:border-slate-950 dark:bg-slate-900 dark:text-white shadow py-8 px-6">
                             {% block body %}
                             {% endblock %}
                         </div>

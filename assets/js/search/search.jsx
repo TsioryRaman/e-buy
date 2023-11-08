@@ -37,7 +37,7 @@ const Search = ({ action }) => {
         action={action}
       >
         <label
-          className=" h-full bottom-0 md:flex items-center pl-4 hidden my-0 mx-0 pr-4"
+          className=" h-full bottom-0 md:flex items-center pl-4 hidden dark:text-gray-700 my-0 mx-0 pr-4"
           htmlFor="search"
         >
           <icon-feather name="search" size="24" />
