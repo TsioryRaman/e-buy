@@ -22,7 +22,7 @@
                             <li class="flex items-center justify-center gap-1">S'inscrire</li>
                         </a>
                     {% else %}
-                        <a class="hover:text-slate-900  pl-2" id="link" href="{{ path('app_login') }}">
+                        <a class="hover:text-slate-900  pl-2" id="link" href="#">
                             <li class="flex items-center justify-center gap-1">
                                 <icon-feather name="user" size="15"></icon-feather>
                                 {{ app.user.email }}</li>
@@ -35,7 +35,7 @@
                                       class="absolute w-4 flex items-center justify-center h-4 bg-red-500 {% if cart == 0 %}hidden{% endif %} rounded-full text-white inline-block text-xs text-center bottom-1 right-0">!</span>
                             </a>
                         </a>
-                        <a class="hover:text-slate-900 duration-300 pl-2" id="link" href="#">
+                        <a class="hover:text-slate-900 duration-300 pl-2" id="link" href="">
                             <li class="flex items-center relative justify-center gap-1">
                                 <icon-feather name="setting" size="20"></icon-feather>
                         </a>

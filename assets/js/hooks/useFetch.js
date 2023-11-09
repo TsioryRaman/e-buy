@@ -13,7 +13,6 @@ export function useFetch()
             credentials: 'include'
         })
         let responseData = await response.json()
-
         if (response.ok) {
             setData(i => responseData)
         }

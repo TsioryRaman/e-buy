@@ -10,8 +10,8 @@
         {% block javascripts %}
             {{ vite_asset("main.js") }}
             {{ vite_asset("tailwind.js") }}
-
         {% endblock %}
+        <meta name="turbolinks-cache-control" content="no-cache">
     </head>
     <body>
         <div class="min-h-screen flex flex-col dark:text-white overflow-x-hidden dark:bg-slate-900">

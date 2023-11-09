@@ -15,9 +15,16 @@ export function useTheme(defaultTheme) {
         } else {
             document.documentElement.classList.remove('dark')
         }
-        load('http://localhost:8000/user/theme', 'POST', {theme})
-            .then()
-            .catch()
+        (async function()
+        {
+            try{
+                const response = await load('http://localhost:8000/user/theme', 'POST', {theme})
+                console.log(response)
+            }catch (e)
+            {
+                console.log(e)
+            }
+        })()
     }, [theme])
     return {
         theme,
