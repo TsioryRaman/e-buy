@@ -18,7 +18,7 @@ export function useTheme(defaultTheme) {
         (async function()
         {
             try{
-                const response = await load('http://localhost:8000/user/theme', 'POST', {theme})
+                const response = await load('http://localhost:8000/api/user/theme', 'POST', {theme})
                 console.log(response)
             }catch (e)
             {

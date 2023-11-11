@@ -35,7 +35,9 @@
                                       class="absolute w-4 flex items-center justify-center h-4 bg-red-500 {% if cart == 0 %}hidden{% endif %} rounded-full text-white inline-block text-xs text-center bottom-1 right-0">!</span>
                             </a>
                         </a>
-                        <a class="hover:text-slate-900 duration-300 pl-2" id="link" href="">
+                        <a class="hover:text-slate-900 dark:hover:text-green-500 duration-300 pl-2"
+                           id="link" {{ menu_active("user.setting") }}
+                           href="{{ path('user.setting', {id:app.user.id}) }}">
                             <li class="flex items-center relative justify-center gap-1">
                                 <icon-feather name="setting" size="20"></icon-feather>
                         </a>

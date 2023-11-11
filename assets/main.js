@@ -7,6 +7,7 @@ import './js/index.js'
 import './js/notification-flash.js'
 import '/js/carousel.js'
 import '/js/functions/theme.js'
+import '/js/functions/auto-upload.js'
 import TurboLinks from 'turbolinks'
 
 multipleUpload()

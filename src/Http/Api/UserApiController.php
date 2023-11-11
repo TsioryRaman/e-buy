@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route(path: '/user')]
+#[Route(path: '/api/user')]
 #[IsGranted('ROLE_USER')]
 class UserApiController extends AbstractController
 {
