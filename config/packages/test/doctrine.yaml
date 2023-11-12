@@ -1,0 +1,8 @@
+parameters:
+    test_token: 1
+
+doctrine:
+    dbal:
+        logging: false
+        # "TEST_TOKEN" is typically set by ParaTest
+        dbname_suffix: '_test%env(default::TEST_TOKEN)%'

@@ -110,4 +110,7 @@ dev:
 build:
 	docker compose build
 
-ebuy@restart: ebuy@stop ebuy@start
+ebebuy@restart: ebuy@stop ebuy@start
+
+tt:
+	$(EXEC_AS_WEB) bin/phpunit

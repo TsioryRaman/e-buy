@@ -2,58 +2,67 @@ version: '3'
 
 services:
 
-    nginx: 
-      image: nginx
-      volumes:
-        - ./:/var/www/symfony 
-        - ./docker/nginx/conf.d:/etc/nginx/conf.d
-      ports:
-        - 8000:80
-      depends_on: 
-        - php-fpm
+    nginx:
+        image: nginx
+        volumes:
+            - ./:/var/www/symfony
+            - ./docker/nginx/conf.d:/etc/nginx/conf.d
+        ports:
+            - 8000:80
+        depends_on:
+            - php-fpm
 
     php-fpm:
-      build: ./docker/php-fpm
-      depends_on:
-        -  mysql
-      volumes: 
-        - ./:/var/www/symfony
-        - ./docker/php-fpm/php.ini:/usr/local/etc/php/php.ini
-      links:
-        - typesense
+        build: ./docker/php-fpm
+        depends_on:
+            - mysql
+        volumes:
+            - ./:/var/www/symfony
+            - ./docker/php-fpm/php.ini:/usr/local/etc/php/php.ini
+        links:
+            - typesense
 
     mysql:
-      image: mariadb:10.1
-      environment:
-        MYSQL_ROOT_PASSWORD: root
-        MYSQL_DATABASE: ebuy
-        MYSQL_USER: ebuy
-        MYSQL_PASSWORD: ebuy
-      ports:
-        - 3306:3306
-      volumes:
-        - mysql-data:/var/lib/mysql
+        image: yobasystems/alpine-mariadb
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: ebuy
+            MYSQL_USER: ebuy
+            MYSQL_PASSWORD: ebuy
+        ports:
+            - 3306:3306
+        volumes:
+            - mysql-data:/var/lib/mysql
+
+    dbtest:
+        image: mariadb:10.1
+        environment:
+            MYSQL_ROOT_PASSWORD: test
+            MYSQL_USER: test
+            MYSQL_PASSWORD: test
+        ports:
+            - 3307:3306
 
     node:
-      build: ./docker/node
-      command: pnpm run dev
-      working_dir: /var/www/symfony/assets
-      volumes:
-        - ./:/var/www/symfony/assets
-      ports:
-        - 3000:3000
-      depends_on: 
-        - php-fpm
+        build: ./docker/node
+        command: pnpm run dev
+        working_dir: /var/www/symfony/assets
+        volumes:
+            - ./:/var/www/symfony/assets
+        ports:
+            - 3000:3000
+        depends_on:
+            - php-fpm
 
     typesense:
-      image: typesense/typesense:0.25.1
-      volumes: 
-        - search-data:/data
-      ports:
-        - 8108:8108
-      command: '--data-dir /data --api-key=typesensekey --enable-cors'
+        image: typesense/typesense:0.25.1
+        volumes:
+            - search-data:/data
+        ports:
+            - 8108:8108
+        command: '--data-dir /data --api-key=typesensekey --enable-cors'
 
 volumes:
-  search-data:
-    driver: local
-  mysql-data:
+    search-data:
+        driver: local
+    mysql-data:
